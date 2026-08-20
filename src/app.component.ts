@@ -170,6 +170,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   }
 
   async submitInquiry() {
+    console.log('Submitting inquiry:', this.inquiry);
     if (this.inquiry.companyFax) { this.sent = true; return; }
     if (!this.inquiry.name || !this.inquiry.company || !this.inquiry.email ||
         !this.inquiry.role || !this.inquiry.message) {

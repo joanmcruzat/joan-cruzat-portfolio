@@ -384,18 +384,59 @@
       <p class="modal-sub">Tell me about the role, company and problem you're looking to solve.</p>
       <div *ngIf="sent" class="success">Thanks for reaching out! Your hiring inquiry has been sent successfully. I'll
         get back to you as soon as possible.</div>
-      <form *ngIf="!sent" (ngSubmit)="submitInquiry()"><input class="hp" type="text" name="companyFax"
-          [(ngModel)]="inquiry.companyFax" tabindex="-1" autocomplete="off" aria-hidden="true">
-        <div class="form-grid"><label>Full Name *<input name="name" [(ngModel)]="inquiry.name"
-              required></label><label>Company *<input name="company" [(ngModel)]="inquiry.company"
-              required></label><label>Work Email *<input type="email" name="email" [(ngModel)]="inquiry.email"
-              required></label><label>Position / Role *<input name="role" [(ngModel)]="inquiry.role"
-              required></label><label>Budget / Salary Range<input name="budget"
-              [(ngModel)]="inquiry.budget"></label><label>LinkedIn / Company Website<input name="website"
-              [(ngModel)]="inquiry.website"></label></div>
-        <label>Message *<textarea name="message" rows="5" [(ngModel)]="inquiry.message" required></textarea></label>
-        <div class="error" *ngIf="error">{{error}}</div><button class="primary full" [disabled]="sending">{{sending ?
-          'Sending…' : 'Send Hiring Inquiry →'}}</button>
+      <form *ngIf="!sent" (ngSubmit)="submitInquiry()">
+
+        <input class="hp" type="text" name="companyFax" [(ngModel)]="inquiry.companyFax" tabindex="-1"
+          autocomplete="off" aria-hidden="true">
+
+        <div class="form-grid">
+
+          <label>
+            Full Name *
+            <input name="name" [(ngModel)]="inquiry.name" required>
+          </label>
+
+          <label>
+            Company *
+            <input name="company" [(ngModel)]="inquiry.company" required>
+          </label>
+
+          <label>
+            Work Email *
+            <input type="email" name="email" [(ngModel)]="inquiry.email" required>
+          </label>
+
+          <label>
+            Position / Role *
+            <input name="role" [(ngModel)]="inquiry.role" required>
+          </label>
+
+          <label>
+            Budget / Salary Range
+            <input name="budget" [(ngModel)]="inquiry.budget">
+          </label>
+
+          <label>
+            LinkedIn / Company Website
+            <input name="website" [(ngModel)]="inquiry.website">
+          </label>
+
+        </div>
+
+        <label>
+          Message *
+          <textarea name="message" rows="5" [(ngModel)]="inquiry.message" required>
+    </textarea>
+        </label>
+
+        <div class="error" *ngIf="error">
+          {{ error }}
+        </div>
+
+        <button type="submit" class="primary full" [disabled]="sending">
+          {{ sending ? 'Sending…' : 'Send Hiring Inquiry →' }}
+        </button>
+
       </form>
       <div class="direct">Prefer email? <a href="mailto:joanmcruzat@gmail.com">Contact me directly.</a></div>
     </div>
