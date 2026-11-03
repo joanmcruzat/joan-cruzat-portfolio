@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, HostListener, OnDestroy } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, ViewChild } from '@angular/core';
 import { animate, inView, stagger } from 'motion';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -18,6 +18,14 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   sent = false;
   error = '';
   private motionCleanups: Array<() => void> = [];
+
+  chatOpen = false;
+  chatSending = false;
+  chatInput = '';
+  chatMessages: Array<{ role: 'user' | 'assistant'; content: string }> = [
+    { role: 'assistant', content: "Hi! I'm Joan's AI assistant. Ask me about their experience, skills or projects." }
+  ];
+  @ViewChild('chatLog') chatLog?: ElementRef<HTMLElement>;
 
   inquiry = {
     name: '', company: '', email: '', role: '', message: '',
@@ -199,6 +207,48 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     }
   }
 
+  toggleChat() {
+    this.chatOpen = !this.chatOpen;
+    if (this.chatOpen) this.scrollChatToEnd();
+  }
+
+  async sendChat() {
+    const text = this.chatInput.trim();
+    if (!text || this.chatSending) return;
+
+    this.chatMessages.push({ role: 'user', content: text });
+    this.chatInput = '';
+    this.chatSending = true;
+    this.scrollChatToEnd();
+
+    try {
+      // The greeting is UI-only; the API expects the conversation to start with the visitor.
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: this.chatMessages.slice(1) })
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data.error || 'Request failed');
+      this.chatMessages.push({ role: 'assistant', content: data.reply });
+    } catch (err) {
+      const message = err instanceof Error && err.message !== 'Request failed'
+        ? err.message
+        : 'Sorry, I can\'t respond right now. Please use the Hire Me form or email instead.';
+      this.chatMessages.push({ role: 'assistant', content: message });
+    } finally {
+      this.chatSending = false;
+      this.scrollChatToEnd();
+    }
+  }
+
+  private scrollChatToEnd() {
+    setTimeout(() => {
+      const log = this.chatLog?.nativeElement;
+      if (log) log.scrollTop = log.scrollHeight;
+    });
+  }
+
   scrollTo(id: string) {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
     this.menuOpen = false;
@@ -216,5 +266,8 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   }
 
   @HostListener('document:keydown.escape')
-  escape() { this.closeHire(); }
+  escape() {
+    if (this.hireOpen) this.closeHire();
+    else this.chatOpen = false;
+  }
 }
