@@ -1,6 +1,8 @@
 <div class="app">
   <header class="nav">
-    <a class="brand" href="#home" (click)="scrollTo('home')">Joan <span>Cruzat</span></a>
+    <a class="brand" href="#home" (click)="scrollTo('home')"
+      >Joan <span>Cruzat</span></a
+    >
     <nav [class.open]="menuOpen">
       <a href="#about" (click)="scrollTo('about')">About</a>
       <a href="#experience" (click)="scrollTo('experience')">Experience</a>
@@ -10,31 +12,61 @@
       <a href="#contact" (click)="scrollTo('contact')">Contact</a>
     </nav>
     <div class="nav-actions">
-      <button class="icon-btn" (click)="toggleTheme()" [attr.aria-label]="dark ? 'Use light mode' : 'Use dark mode'">{{
-        dark ? '☼' : '☾' }}</button>
-      <button class="hire-btn" (click)="openHire()">Hire Me <span>→</span></button>
-      <button class="menu-btn" (click)="menuOpen=!menuOpen" aria-label="Open menu">☰</button>
+      <button
+        class="icon-btn"
+        (click)="toggleTheme()"
+        [attr.aria-label]="dark ? 'Use light mode' : 'Use dark mode'"
+      >
+        {{ dark ? "☼" : "☾" }}
+      </button>
+      <button class="hire-btn" (click)="openHire()">
+        Hire Me <span>→</span>
+      </button>
+      <button
+        class="menu-btn"
+        (click)="menuOpen = !menuOpen"
+        aria-label="Open menu"
+      >
+        ☰
+      </button>
     </div>
   </header>
 
   <main id="home">
     <section class="hero section">
       <div class="hero-copy">
-        <div class="eyebrow"><span class="pulse"></span> AVAILABLE FOR SELECTED REMOTE OPPORTUNITIES</div>
-        <h1>I build scalable systems, APIs, and experiences that <em>solve real business problems.</em></h1>
-        <p class="lead">Senior Full Stack Engineer specializing in .NET, Angular, REST APIs, databases, integrations,
-          and modern web applications.</p>
+        <div class="eyebrow">
+          <span class="pulse"></span> AVAILABLE FOR SELECTED REMOTE
+          OPPORTUNITIES
+        </div>
+        <h1>
+          I build scalable systems, APIs, and experiences that
+          <em>solve real business problems.</em>
+        </h1>
+        <p class="lead">
+          Senior Full Stack Engineer specializing in .NET, Angular, REST APIs,
+          databases, integrations, and modern web applications.
+        </p>
         <div class="hero-actions">
-          <button class="primary" (click)="openHire()">Hire Me <span>→</span></button>
+          <button class="primary" (click)="openHire()">
+            Hire Me <span>→</span>
+          </button>
           <a class="secondary" href="#projects">View My Work</a>
           <a class="secondary" href="/resume.pdf" download>Download Resume</a>
         </div>
-        <div class="socials"><a href="https://github.com/joanmcruzat" target="_blank">GitHub ↗</a><a
-            href="https://linkedin.com/in/joan-cruzat" target="_blank">LinkedIn ↗</a></div>
+        <div class="socials">
+          <a href="https://github.com/joanmcruzat" target="_blank">GitHub ↗</a
+          ><a href="https://linkedin.com/in/joan-cruzat" target="_blank"
+            >LinkedIn ↗</a
+          >
+        </div>
       </div>
       <div class="hero-visual">
         <div class="terminal">
-          <div class="terminal-bar"><span></span><span></span><span></span><small>joan-cruzat-engineer.ts</small></div>
+          <div class="terminal-bar">
+            <span></span><span></span><span></span
+            ><small>joan-cruzat-engineer.ts</small>
+          </div>
           <pre><code><span class="kw">const</span> engineer = &#123;
             experience: <span class="num">"8+ years"</span>,
             focus: [
@@ -48,13 +80,17 @@
             ]
           &#125;;</code></pre>
         </div>
-        <div class="experience-badge"><strong>8+</strong><span>YEARS<br>EXPERIENCE</span></div>
+        <div class="experience-badge">
+          <strong>8+</strong><span>YEARS<br />EXPERIENCE</span>
+        </div>
       </div>
     </section>
 
-    <div class="ticker"><span>ENGINEERING WITH PURPOSE</span><span>•</span><span>FULL
-        STACK</span><span>•</span><span>API
-        INTEGRATIONS</span><span>•</span><span>FINTECH</span><span>•</span><span>CLOUD</span><span>•</span><span>PERFORMANCE</span>
+    <div class="ticker">
+      <span>ENGINEERING WITH PURPOSE</span><span>•</span><span>FULL STACK</span
+      ><span>•</span><span>API INTEGRATIONS</span><span>•</span
+      ><span>FINTECH</span><span>•</span><span>CLOUD</span><span>•</span
+      ><span>PERFORMANCE</span>
     </div>
 
     <section id="about" class="section split reveal">
@@ -63,12 +99,19 @@
         <h2>More than shipping code.</h2>
       </div>
       <div class="prose">
-        <p>I build reliable software by combining clean architecture, practical engineering, and a strong understanding
-          of business requirements.</p>
-        <p>My experience spans frontend, backend, databases, integrations, testing, deployment and production
-          troubleshooting. That lets me look at a feature as a complete system—not just a ticket to implement.</p>
-        <div class="quote">“The goal isn't simply to make software work. It's to make it reliable, understandable,
-          secure, and ready for the next change.”</div>
+        <p>
+          I build reliable software by combining clean architecture, practical
+          engineering, and a strong understanding of business requirements.
+        </p>
+        <p>
+          My experience spans frontend, backend, databases, integrations,
+          testing, deployment and production troubleshooting. That lets me look
+          at a feature as a complete system—not just a ticket to implement.
+        </p>
+        <div class="quote">
+          “The goal isn't simply to make software work. It's to make it
+          reliable, understandable, secure, and ready for the next change.”
+        </div>
       </div>
     </section>
 
@@ -81,29 +124,46 @@
           <div>
             <h3>Senior / .NET Full Stack Engineer</h3>
             <p class="company">Xentra Solutions</p>
-            <p>Built enterprise-grade .NET applications and REST APIs, optimized SQL queries and stored procedures,
-              designed database structures, delivered financial integrations and microservices, and worked across AWS,
-              Linux, CI/CD, logging and deployment.</p>
-            <div class="chips"><span>.NET
-                Core</span><span>Angular</span><span>SQL</span><span>AWS</span><span>Microservices</span></div>
+            <p>
+              Built enterprise-grade .NET applications and REST APIs, optimized
+              SQL queries and stored procedures, designed database structures,
+              delivered financial integrations and microservices, and worked
+              across AWS, Linux, CI/CD, logging and deployment.
+            </p>
+            <div class="chips">
+              <span>.NET Core</span><span>Angular</span><span>MySQL</span
+              ><span>AWS</span><span>Microservices</span>
+            </div>
           </div>
         </article>
         <article>
           <div class="time">2020 — 2026</div>
           <div>
             <h3>Angular Frontend Developer</h3>
-            <p>Built complex Angular applications and operator dashboards with reporting, graphs, reusable components,
-              forms, settings and REST API integration using TypeScript, RxJS, Angular Material and Tailwind CSS.</p>
-            <div class="chips"><span>Angular</span><span>TypeScript</span><span>RxJS</span><span>Jasmine</span></div>
+            <p>
+              Built complex Angular applications and operator dashboards with
+              reporting, graphs, reusable components, forms, settings and REST
+              API integration using TypeScript, RxJS, Angular Material and
+              Tailwind CSS.
+            </p>
+            <div class="chips">
+              <span>Angular</span><span>TypeScript</span><span>RxJS</span
+              ><span>Jasmine</span>
+            </div>
           </div>
         </article>
         <article>
           <div class="time">2016 — 2020</div>
           <div>
             <h3>PHP Full Stack Developer</h3>
-            <p>Developed database-driven academic information management systems and full-stack applications using PHP,
-              JavaScript, HTML, CSS and relational databases.</p>
-            <div class="chips"><span>PHP</span><span>JavaScript</span><span>SQL</span></div>
+            <p>
+              Developed database-driven academic information management systems
+              and full-stack applications using PHP, JavaScript, HTML, CSS and
+              relational databases.
+            </p>
+            <div class="chips">
+              <span>PHP</span><span>JavaScript</span><span>SQL</span>
+            </div>
           </div>
         </article>
       </div>
@@ -112,16 +172,19 @@
     <section id="projects" class="section projects">
       <div class="section-label">03 / SELECTED WORK</div>
       <div class="section-head">
-        <h2>Systems I've worked on.</h2><span>REAL PROBLEMS · REAL SYSTEMS</span>
+        <h2>Systems I've worked on.</h2>
+        <span>REAL PROBLEMS · REAL SYSTEMS</span>
       </div>
       <div class="project-grid">
-        <article class="project" *ngFor="let p of projects; let i=index">
-          <div class="project-no">0{{i+1}}</div>
-          <div class="tag">{{p.tag}}</div>
-          <h3>{{p.title}}</h3>
-          <p>{{p.desc}}</p>
-          <div class="chips"><span *ngFor="let t of p.tech">{{t}}</span></div><a href="#contact">Explore case study
-            →</a>
+        <article class="project" *ngFor="let p of projects; let i = index">
+          <div class="project-no">0{{ i + 1 }}</div>
+          <div class="tag">{{ p.tag }}</div>
+          <h3>{{ p.title }}</h3>
+          <p>{{ p.desc }}</p>
+          <div class="chips">
+            <span *ngFor="let t of p.tech">{{ t }}</span>
+          </div>
+          <a href="#contact">Explore case study →</a>
         </article>
       </div>
     </section>
@@ -130,31 +193,53 @@
       <div class="section-label">04 / ENGINEERING</div>
       <h2>How I think as an engineer.</h2>
       <div class="principles">
-        <article><b>01</b>
+        <article>
+          <b>01</b>
           <h3>Performance</h3>
-          <p>Query plans, indexing, caching, payload size and scalability—not just whether an endpoint returns 200.</p>
-        </article>
-        <article><b>02</b>
-          <h3>Maintainability</h3>
-          <p>Clear abstractions, reusable components and code that another engineer can understand six months later.</p>
-        </article>
-        <article><b>03</b>
-          <h3>Security</h3>
-          <p>Authentication, authorization, validation, sensitive data handling, secure integrations and useful logging.
+          <p>
+            Query plans, indexing, caching, payload size and scalability—not
+            just whether an endpoint returns 200.
           </p>
         </article>
-        <article><b>04</b>
+        <article>
+          <b>02</b>
+          <h3>Maintainability</h3>
+          <p>
+            Clear abstractions, reusable components and code that another
+            engineer can understand six months later.
+          </p>
+        </article>
+        <article>
+          <b>03</b>
+          <h3>Security</h3>
+          <p>
+            Authentication, authorization, validation, sensitive data handling,
+            secure integrations and useful logging.
+          </p>
+        </article>
+        <article>
+          <b>04</b>
           <h3>Reliability</h3>
-          <p>Validation, failure scenarios, error handling, retries where appropriate, observability and operational
-            thinking.</p>
+          <p>
+            Validation, failure scenarios, error handling, retries where
+            appropriate, observability and operational thinking.
+          </p>
         </article>
-        <article><b>05</b>
+        <article>
+          <b>05</b>
           <h3>Scalability</h3>
-          <p>Database growth, API traffic, caching, asynchronous processing and sensible service boundaries.</p>
+          <p>
+            Database growth, API traffic, caching, asynchronous processing and
+            sensible service boundaries.
+          </p>
         </article>
-        <article><b>06</b>
+        <article>
+          <b>06</b>
           <h3>Developer Experience</h3>
-          <p>Documentation, testing, automation and CI/CD that help teams deliver confidently.</p>
+          <p>
+            Documentation, testing, automation and CI/CD that help teams deliver
+            confidently.
+          </p>
         </article>
       </div>
     </section>
@@ -164,44 +249,28 @@
       <h2>A system view.</h2>
 
       <div class="arch">
-        <div class="node frontend">
-          Angular Frontend
-        </div>
+        <div class="node frontend">Angular Frontend</div>
 
         <div class="arrow">↓</div>
 
-        <div class="node">
-          .NET Web API
-        </div>
+        <div class="node">.NET Web API</div>
 
         <div class="arrow">↓</div>
 
-        <div class="node">
-          Application / Business Layer
-        </div>
+        <div class="node">Application / Business Layer</div>
 
         <div class="arrow">↓</div>
 
-        <div class="node">
-          Data Access Layer
-        </div>
+        <div class="node">Data Access Layer</div>
 
         <div class="branch">
-          <div class="node small">
-            SQL Server / MySQL / PostgreSQL
-          </div>
+          <div class="node small">SQL Server / MySQL / PostgreSQL</div>
 
-          <div class="node small">
-            Redis Cache
-          </div>
+          <div class="node small">Redis Cache</div>
 
-          <div class="node small">
-            Third-Party APIs
-          </div>
+          <div class="node small">Third-Party APIs</div>
 
-          <div class="node small">
-            AWS / Cloud Infrastructure
-          </div>
+          <div class="node small">AWS / Cloud Infrastructure</div>
         </div>
 
         <div class="architecture-caption">
@@ -219,11 +288,12 @@
       <h2>Technologies I work with.</h2>
 
       <div class="tech-grid">
-
         <div class="tech-card">
           <div class="tech-logo">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@master/icons/dot-net/dot-net-original.svg"
-              alt=".NET" />
+            <img
+              src="https://cdn.jsdelivr.net/gh/devicons/devicon@master/icons/dot-net/dot-net-original.svg"
+              alt=".NET"
+            />
           </div>
           <strong>.NET</strong>
           <span>Backend & APIs</span>
@@ -231,7 +301,10 @@
 
         <div class="tech-card">
           <div class="tech-logo">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@master/icons/csharp/csharp-original.svg" alt="C#" />
+            <img
+              src="https://cdn.jsdelivr.net/gh/devicons/devicon@master/icons/csharp/csharp-original.svg"
+              alt="C#"
+            />
           </div>
           <strong>C#</strong>
           <span>Application development</span>
@@ -239,8 +312,10 @@
 
         <div class="tech-card">
           <div class="tech-logo">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@master/icons/angular/angular-original.svg"
-              alt="Angular" />
+            <img
+              src="https://cdn.jsdelivr.net/gh/devicons/devicon@master/icons/angular/angular-original.svg"
+              alt="Angular"
+            />
           </div>
           <strong>Angular</strong>
           <span>Frontend applications</span>
@@ -248,8 +323,10 @@
 
         <div class="tech-card">
           <div class="tech-logo">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@master/icons/typescript/typescript-original.svg"
-              alt="TypeScript" />
+            <img
+              src="https://cdn.jsdelivr.net/gh/devicons/devicon@master/icons/typescript/typescript-original.svg"
+              alt="TypeScript"
+            />
           </div>
           <strong>TypeScript</strong>
           <span>Frontend engineering</span>
@@ -259,7 +336,8 @@
           <div class="tech-logo">
             <img
               src="https://cdn.jsdelivr.net/gh/devicons/devicon@master/icons/microsoftsqlserver/microsoftsqlserver-plain.svg"
-              alt="Microsoft SQL Server" />
+              alt="Microsoft SQL Server"
+            />
           </div>
           <strong>SQL Server</strong>
           <span>Relational data</span>
@@ -267,7 +345,10 @@
 
         <div class="tech-card">
           <div class="tech-logo">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@master/icons/mysql/mysql-original.svg" alt="MySQL" />
+            <img
+              src="https://cdn.jsdelivr.net/gh/devicons/devicon@master/icons/mysql/mysql-original.svg"
+              alt="MySQL"
+            />
           </div>
           <strong>MySQL</strong>
           <span>Relational data</span>
@@ -275,8 +356,10 @@
 
         <div class="tech-card">
           <div class="tech-logo">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@master/icons/postgresql/postgresql-original.svg"
-              alt="PostgreSQL" />
+            <img
+              src="https://cdn.jsdelivr.net/gh/devicons/devicon@master/icons/postgresql/postgresql-original.svg"
+              alt="PostgreSQL"
+            />
           </div>
           <strong>PostgreSQL</strong>
           <span>Relational data</span>
@@ -286,7 +369,8 @@
           <div class="tech-logo">
             <img
               src="https://cdn.jsdelivr.net/gh/devicons/devicon@master/icons/amazonwebservices/amazonwebservices-original-wordmark.svg"
-              alt="Amazon Web Services" />
+              alt="Amazon Web Services"
+            />
           </div>
           <strong>AWS</strong>
           <span>Cloud infrastructure</span>
@@ -294,7 +378,10 @@
 
         <div class="tech-card">
           <div class="tech-logo">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@master/icons/redis/redis-original.svg" alt="Redis" />
+            <img
+              src="https://cdn.jsdelivr.net/gh/devicons/devicon@master/icons/redis/redis-original.svg"
+              alt="Redis"
+            />
           </div>
           <strong>Redis</strong>
           <span>Caching & performance</span>
@@ -302,8 +389,10 @@
 
         <div class="tech-card">
           <div class="tech-logo">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@master/icons/playwright/playwright-original.svg"
-              alt="Playwright" />
+            <img
+              src="https://cdn.jsdelivr.net/gh/devicons/devicon@master/icons/playwright/playwright-original.svg"
+              alt="Playwright"
+            />
           </div>
           <strong>Playwright</strong>
           <span>E2E automation</span>
@@ -311,7 +400,10 @@
 
         <div class="tech-card">
           <div class="tech-logo">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@master/icons/git/git-original.svg" alt="Git" />
+            <img
+              src="https://cdn.jsdelivr.net/gh/devicons/devicon@master/icons/git/git-original.svg"
+              alt="Git"
+            />
           </div>
           <strong>Git</strong>
           <span>Version control</span>
@@ -319,25 +411,25 @@
 
         <div class="tech-card">
           <div class="tech-logo">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@master/icons/docker/docker-original.svg"
-              alt="Docker" />
+            <img
+              src="https://cdn.jsdelivr.net/gh/devicons/devicon@master/icons/docker/docker-original.svg"
+              alt="Docker"
+            />
           </div>
           <strong>Docker</strong>
           <span>Application containers</span>
         </div>
-
       </div>
 
       <div class="quality-grid">
-
         <article class="quality-card">
           <span class="quality-number">01</span>
 
           <h3>Testing & Quality</h3>
 
           <p>
-            Unit Testing · Jasmine · Playwright · Cypress · API Testing ·
-            E2E Testing · CI Testing · TDD Concepts
+            Unit Testing · Jasmine · Playwright · Cypress · API Testing · E2E
+            Testing · CI Testing · TDD Concepts
           </p>
         </article>
 
@@ -347,12 +439,11 @@
           <h3>AI-Assisted Development</h3>
 
           <p>
-            GitHub Copilot · ChatGPT · AI coding assistants.
-            AI-generated output is reviewed, tested, and validated
-            for security, correctness and performance.
+            GitHub Copilot · ChatGPT · AI coding assistants. AI-generated output
+            is reviewed, tested, and validated for security, correctness and
+            performance.
           </p>
         </article>
-
       </div>
     </section>
 
@@ -361,72 +452,108 @@
         <div>
           <div class="section-label">07 / CONTACT</div>
           <h2>Have a challenging system to build?</h2>
-          <p>Let's talk about how I can help build, modernize, integrate, or scale it.</p>
-        </div><button class="primary large" (click)="openHire()">Hire Me <span>→</span></button>
+          <p>
+            Let's talk about how I can help build, modernize, integrate, or
+            scale it.
+          </p>
+        </div>
+        <button class="primary large" (click)="openHire()">
+          Hire Me <span>→</span>
+        </button>
       </div>
-      <div class="contact-links"><a href="mailto:joanmcruzat@gmail.com">Email Me ↗</a><a
-          href="https://linkedin.com/in/joan-cruzat" target="_blank">LinkedIn ↗</a><a
-          href="https://github.com/joanmcruzat" target="_blank">GitHub ↗</a><a href="/resume.pdf" download>Download
-          Resume ↗</a></div>
+      <div class="contact-links">
+        <a href="mailto:joanmcruzat@gmail.com">Email Me ↗</a
+        ><a href="https://linkedin.com/in/joan-cruzat" target="_blank"
+          >LinkedIn ↗</a
+        ><a href="https://github.com/joanmcruzat" target="_blank">GitHub ↗</a
+        ><a href="/resume.pdf" download>Download Resume ↗</a>
+      </div>
     </section>
   </main>
 
   <footer>
-    <div><strong>Joan Cruzat</strong><span>Senior Full Stack Engineer</span></div>
-    <div>.NET · Angular · APIs · Cloud · Databases</div><small>© 2026 Joan Cruzat. All rights reserved.</small>
+    <div>
+      <strong>Joan Cruzat</strong><span>Senior Full Stack Engineer</span>
+    </div>
+    <div>.NET · Angular · APIs · Cloud · Databases</div>
+    <small>© 2026 Joan Cruzat. All rights reserved.</small>
   </footer>
 
   <div class="modal-backdrop" *ngIf="hireOpen" (click)="closeHire()">
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="hire-title" (click)="$event.stopPropagation()">
+    <div
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="hire-title"
+      (click)="$event.stopPropagation()"
+    >
       <button class="close" (click)="closeHire()" aria-label="Close">×</button>
       <div class="section-label">HIRE ME</div>
       <h2 id="hire-title">Start a conversation.</h2>
-      <p class="modal-sub">Tell me about the role, company and problem you're looking to solve.</p>
-      <div *ngIf="sent" class="success">Thanks for reaching out! Your hiring inquiry has been sent successfully. I'll
-        get back to you as soon as possible.</div>
+      <p class="modal-sub">
+        Tell me about the role, company and problem you're looking to solve.
+      </p>
+      <div *ngIf="sent" class="success">
+        Thanks for reaching out! Your hiring inquiry has been sent successfully.
+        I'll get back to you as soon as possible.
+      </div>
       <form *ngIf="!sent" (ngSubmit)="submitInquiry()">
-
-        <input class="hp" type="text" name="companyFax" [(ngModel)]="inquiry.companyFax" tabindex="-1"
-          autocomplete="off" aria-hidden="true">
+        <input
+          class="hp"
+          type="text"
+          name="companyFax"
+          [(ngModel)]="inquiry.companyFax"
+          tabindex="-1"
+          autocomplete="off"
+          aria-hidden="true"
+        />
 
         <div class="form-grid">
-
           <label>
             Full Name *
-            <input name="name" [(ngModel)]="inquiry.name" required>
+            <input name="name" [(ngModel)]="inquiry.name" required />
           </label>
 
           <label>
             Company *
-            <input name="company" [(ngModel)]="inquiry.company" required>
+            <input name="company" [(ngModel)]="inquiry.company" required />
           </label>
 
           <label>
             Work Email *
-            <input type="email" name="email" [(ngModel)]="inquiry.email" required>
+            <input
+              type="email"
+              name="email"
+              [(ngModel)]="inquiry.email"
+              required
+            />
           </label>
 
           <label>
             Position / Role *
-            <input name="role" [(ngModel)]="inquiry.role" required>
+            <input name="role" [(ngModel)]="inquiry.role" required />
           </label>
 
           <label>
             Budget / Salary Range
-            <input name="budget" [(ngModel)]="inquiry.budget">
+            <input name="budget" [(ngModel)]="inquiry.budget" />
           </label>
 
           <label>
             LinkedIn / Company Website
-            <input name="website" [(ngModel)]="inquiry.website">
+            <input name="website" [(ngModel)]="inquiry.website" />
           </label>
-
         </div>
 
         <label>
           Message *
-          <textarea name="message" rows="5" [(ngModel)]="inquiry.message" required>
-    </textarea>
+          <textarea
+            name="message"
+            rows="5"
+            [(ngModel)]="inquiry.message"
+            required
+          >
+          </textarea>
         </label>
 
         <div class="error" *ngIf="error">
@@ -434,11 +561,64 @@
         </div>
 
         <button type="submit" class="primary full" [disabled]="sending">
-          {{ sending ? 'Sending…' : 'Send Hiring Inquiry →' }}
+          {{ sending ? "Sending…" : "Send Hiring Inquiry →" }}
         </button>
-
       </form>
-      <div class="direct">Prefer email? <a href="mailto:joanmcruzat@gmail.com">Contact me directly.</a></div>
+      <div class="direct">
+        Prefer email?
+        <a href="mailto:joanmcruzat@gmail.com">Contact me directly.</a>
+      </div>
     </div>
+  </div>
+
+  <div class="chatbot">
+    <section
+      class="chat-panel"
+      *ngIf="chatOpen"
+      role="dialog"
+      aria-label="Chat with Joan's AI assistant"
+    >
+      <header class="chat-header">
+        <div class="chat-avatar small" aria-hidden="true">JC</div>
+        <div>
+          <strong>Ask about Joan</strong>
+          <span>AI assistant · usually replies in seconds</span>
+        </div>
+        <button class="chat-close" (click)="toggleChat()" aria-label="Close chat">×</button>
+      </header>
+
+      <div class="chat-log" #chatLog aria-live="polite">
+        <div
+          *ngFor="let m of chatMessages"
+          class="chat-msg"
+          [class.user]="m.role === 'user'"
+        >{{ m.content }}</div>
+        <div class="chat-msg typing" *ngIf="chatSending" aria-label="Assistant is typing">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+
+      <form class="chat-form" (ngSubmit)="sendChat()">
+        <input
+          name="chatInput"
+          [(ngModel)]="chatInput"
+          placeholder="Ask about skills, projects…"
+          maxlength="1500"
+          autocomplete="off"
+          aria-label="Your message"
+        />
+        <button type="submit" [disabled]="chatSending || !chatInput.trim()" aria-label="Send">→</button>
+      </form>
+    </section>
+
+    <button
+      class="chat-launcher"
+      (click)="toggleChat()"
+      [attr.aria-expanded]="chatOpen"
+      [attr.aria-label]="chatOpen ? 'Close chat' : 'Open chat'"
+    >
+      <span class="chat-avatar" aria-hidden="true">{{ chatOpen ? "×" : "JC" }}</span>
+      <span class="chat-dot" *ngIf="!chatOpen" aria-hidden="true"></span>
+    </button>
   </div>
 </div>
