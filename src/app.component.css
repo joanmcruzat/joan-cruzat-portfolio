@@ -1977,6 +1977,8 @@ textarea {
   overflow-wrap: anywhere;
 }
 
+.chat-msg a { color: var(--accent); font-weight: 600; }
+
 .chat-msg.user {
   align-self: flex-end;
   border-radius: 14px 14px 4px 14px;

@@ -22,8 +22,12 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   chatOpen = false;
   chatSending = false;
   chatInput = '';
-  chatMessages: Array<{ role: 'user' | 'assistant'; content: string }> = [
-    { role: 'assistant', content: "Hi! I'm Joan's AI assistant. Ask me about their experience, skills or projects." }
+  chatMessages: Array<{ role: 'user' | 'assistant'; content: string; link?: { href: string; label: string } }> = [
+    {
+      role: 'assistant',
+      content: "Hi! I'm Joan's AI assistant. Ask me about their experience, skills or projects. \n \nYou can also connect with Joan on Linked In: ",
+      link: { href: 'https://www.linkedin.com/in/joan-cruzat/', label: 'linkedin.com/in/joan-cruzat' }
+    }
   ];
   @ViewChild('chatLog') chatLog?: ElementRef<HTMLElement>;
 

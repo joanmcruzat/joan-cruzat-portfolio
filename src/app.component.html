@@ -592,7 +592,7 @@
           *ngFor="let m of chatMessages"
           class="chat-msg"
           [class.user]="m.role === 'user'"
-        >{{ m.content }}</div>
+        >{{ m.content }}<ng-container *ngIf="m.link"> <a [href]="m.link.href" target="_blank" rel="noopener noreferrer">{{ m.link.label }}</a></ng-container></div>
         <div class="chat-msg typing" *ngIf="chatSending" aria-label="Assistant is typing">
           <span></span><span></span><span></span>
         </div>
