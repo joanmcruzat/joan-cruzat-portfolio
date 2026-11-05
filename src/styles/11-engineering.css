@@ -1,0 +1,27 @@
+/* =========================================================
+   ENGINEERING
+   ========================================================= */
+
+.principles {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 1px;
+
+  background: var(--border);
+}
+
+.principles article {
+  min-height: 230px;
+
+  padding: 30px;
+
+  background: var(--bg);
+}
+
+.principles b {
+  color: var(--accent);
+
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+}

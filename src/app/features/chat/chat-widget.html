@@ -1,0 +1,49 @@
+<div class="chatbot">
+  @if (isOpen()) {
+    <section class="chat-panel" role="dialog" [attr.aria-label]="'Chat with ' + firstName() + '\'s AI assistant'">
+      <header class="chat-header">
+        <div class="chat-avatar small" aria-hidden="true">{{ initials() }}</div>
+        <div>
+          <strong>Ask about {{ firstName() }}</strong>
+          <span>AI assistant · usually replies in seconds</span>
+        </div>
+        <button class="chat-close" (click)="toggle()" aria-label="Close chat">×</button>
+      </header>
+
+      <div class="chat-log" #chatLog aria-live="polite">
+        <div class="chat-msg">{{ greeting() }} <a [href]="linkedinUrl()" target="_blank" rel="noopener noreferrer">{{ linkedinLabel() }}</a></div>
+        @for (message of messages(); track $index) {
+          <div class="chat-msg" [class.user]="message.role === 'user'">{{ message.content }}</div>
+        }
+        @if (sending()) {
+          <div class="chat-msg typing" aria-label="Assistant is typing"><span></span><span></span><span></span></div>
+        }
+      </div>
+
+      <form class="chat-form" (submit)="send($event)">
+        <input
+          name="chatInput"
+          [value]="draft()"
+          (input)="updateDraft($event)"
+          placeholder="Ask about skills, projects…"
+          [attr.maxlength]="maxMessageChars"
+          autocomplete="off"
+          aria-label="Your message"
+        />
+        <button type="submit" [disabled]="!canSend()" aria-label="Send">→</button>
+      </form>
+    </section>
+  }
+
+  <button
+    class="chat-launcher"
+    (click)="toggle()"
+    [attr.aria-expanded]="isOpen()"
+    [attr.aria-label]="isOpen() ? 'Close chat' : 'Open chat'"
+  >
+    <span class="chat-avatar" aria-hidden="true">{{ isOpen() ? '×' : initials() }}</span>
+    @if (!isOpen()) {
+      <span class="chat-dot" aria-hidden="true"></span>
+    }
+  </button>
+</div>

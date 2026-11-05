@@ -16,20 +16,53 @@
             "outputPath": "dist/joan-cruzat-portfolio",
             "index": "src/index.html",
             "browser": "src/main.ts",
-            "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "assets": [
               "src/favicon.ico",
               "src/assets"
             ],
-            "styles": ["src/styles.css"],
+            "styles": [
+              "src/styles.css",
+              "src/styles/01-tokens.css",
+              "src/styles/02-base.css",
+              "src/styles/03-nav.css",
+              "src/styles/04-general.css",
+              "src/styles/05-hero.css",
+              "src/styles/06-hero-terminal.css",
+              "src/styles/07-ticker.css",
+              "src/styles/08-about.css",
+              "src/styles/09-experience.css",
+              "src/styles/10-projects.css",
+              "src/styles/11-engineering.css",
+              "src/styles/12-architecture.css",
+              "src/styles/13-skills.css",
+              "src/styles/14-contact.css",
+              "src/styles/15-footer.css",
+              "src/styles/16-hire-modal.css",
+              "src/styles/17-responsive.css",
+              "src/styles/18-reduced-motion.css",
+              "src/styles/19-motion.css",
+              "src/styles/20-toolbox.css",
+              "src/styles/21-toolbox-quality.css",
+              "src/styles/22-toolbox-responsive.css",
+              "src/styles/23-chat.css",
+              "src/styles/24-app-state.css"
+            ],
             "scripts": []
           },
           "configurations": {
             "production": {
               "budgets": [
-                {"type": "initial", "maximumWarning": "1mb", "maximumError": "2mb"},
-                {"type": "anyComponentStyle", "maximumWarning": "20kb", "maximumError": "30kb"}
+                {
+                  "type": "initial",
+                  "maximumWarning": "1mb",
+                  "maximumError": "2mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "20kb",
+                  "maximumError": "30kb"
+                }
               ],
               "outputHashing": "all"
             },
@@ -44,10 +77,21 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
-            "production": {"buildTarget": "joan-cruzat-portfolio:build:production"},
-            "development": {"buildTarget": "joan-cruzat-portfolio:build:development"}
+            "production": {
+              "buildTarget": "joan-cruzat-portfolio:build:production"
+            },
+            "development": {
+              "buildTarget": "joan-cruzat-portfolio:build:development"
+            }
           },
           "defaultConfiguration": "development"
+        },
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "tsConfig": "tsconfig.spec.json",
+            "buildTarget": "::development"
+          }
         }
       }
     }
