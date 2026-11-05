@@ -1,0 +1,118 @@
+/* =========================================================
+   TOOLBOX — TESTING & QUALITY
+   ========================================================= */
+
+.quality-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+
+  margin-top: 70px;
+}
+
+.quality-card {
+  position: relative;
+
+  min-height: 240px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+
+  padding: 32px;
+
+  border: 1px solid var(--border);
+  border-radius: 16px;
+
+  background: var(--surface);
+
+  overflow: hidden;
+
+  transition:
+    transform .35s cubic-bezier(.22, 1, .36, 1),
+    border-color .25s ease,
+    background-color .25s ease,
+    box-shadow .25s ease;
+}
+
+/* subtle accent line */
+.quality-card::before {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 70px;
+  height: 2px;
+
+  background: var(--accent);
+
+  transform: scaleX(.55);
+  transform-origin: left;
+
+  transition: transform .35s ease;
+}
+
+.quality-card:hover {
+  transform: translateY(-5px);
+
+  border-color: var(--accent-dark);
+
+  background: var(--surface-2);
+
+  box-shadow: 0 18px 45px var(--shadow-soft);
+}
+
+.quality-card:hover::before {
+  transform: scaleX(1);
+}
+
+
+/* Number */
+
+.quality-number {
+  display: block;
+
+  margin-bottom: 30px;
+
+  color: var(--accent);
+
+  font-family: "JetBrains Mono", monospace;
+
+  font-size: 10px;
+  font-weight: 600;
+
+  letter-spacing: .12em;
+}
+
+
+/* Heading */
+
+.quality-card h3 {
+  margin: 0 0 18px;
+
+  color: var(--text);
+
+  font-size: 22px;
+
+  line-height: 1.25;
+
+  letter-spacing: -.025em;
+}
+
+
+/* Description */
+
+.quality-card p {
+  max-width: 650px;
+
+  margin: 0;
+
+  color: var(--muted);
+
+  font-size: 14px;
+
+  line-height: 1.75;
+}

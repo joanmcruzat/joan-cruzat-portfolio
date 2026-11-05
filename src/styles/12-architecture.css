@@ -1,0 +1,69 @@
+/* =========================================================
+   ARCHITECTURE
+   ========================================================= */
+
+.arch {
+  max-width: 900px;
+
+  margin: 0 auto;
+
+  text-align: center;
+}
+
+.node {
+  display: inline-block;
+
+  min-width: 240px;
+
+  padding: 15px 25px;
+
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+
+  background: var(--surface);
+
+  color: var(--text);
+
+  box-shadow: 0 15px 45px var(--shadow-soft);
+
+  transition:
+    border-color .2s ease,
+    background-color .25s ease,
+    transform .2s ease;
+}
+
+.node:hover {
+  border-color: var(--accent-dark);
+
+  transform: translateY(-2px);
+}
+
+.node.frontend {
+  border-color: var(--accent);
+}
+
+.arrow {
+  margin: 7px;
+
+  color: var(--accent);
+
+  font-size: 22px;
+}
+
+.branch {
+  display: grid;
+
+  grid-template-columns: repeat(4, 1fr);
+
+  gap: 10px;
+
+  margin-top: 25px;
+}
+
+.node.small {
+  min-width: 0;
+
+  padding: 14px;
+
+  font-size: 10px;
+}

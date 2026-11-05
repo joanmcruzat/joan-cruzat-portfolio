@@ -1,0 +1,42 @@
+<div class="modal-backdrop" (click)="close()">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="hire-title" (click)="$event.stopPropagation()">
+    <button class="close" (click)="close()" aria-label="Close">×</button>
+    <div class="section-label">HIRE ME</div>
+    <h2 id="hire-title">Start a conversation.</h2>
+    <p class="modal-sub">Tell me about the role, company and problem you're looking to solve.</p>
+
+    @if (sent()) {
+      <div class="success">
+        Thanks for reaching out! Your hiring inquiry has been sent successfully.
+        I'll get back to you as soon as possible.
+      </div>
+    } @else {
+      <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+        <input class="hp" type="text" formControlName="companyFax" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+        <div class="form-grid">
+          <label>Full Name * <input formControlName="name" required /></label>
+          <label>Company * <input formControlName="company" required /></label>
+          <label>Work Email * <input type="email" formControlName="email" required /></label>
+          <label>Position / Role * <input formControlName="role" required /></label>
+          <label>Budget / Salary Range <input formControlName="budget" /></label>
+          <label>LinkedIn / Company Website <input formControlName="website" /></label>
+        </div>
+
+        <label>Message * <textarea formControlName="message" rows="5" required></textarea></label>
+
+        @if (error()) {
+          <div class="error">{{ error() }}</div>
+        }
+
+        <button type="submit" class="primary full" [disabled]="sending()">
+          {{ sending() ? 'Sending…' : 'Send Hiring Inquiry →' }}
+        </button>
+      </form>
+    }
+
+    <div class="direct">
+      Prefer email? <a [href]="'mailto:' + email()">Contact me directly.</a>
+    </div>
+  </div>
+</div>

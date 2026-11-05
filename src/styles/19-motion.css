@@ -1,0 +1,69 @@
+/* =========================================================
+   MOTION POLISH
+   Motion handles the entrance choreography. CSS only supplies
+   subtle interaction states so the design remains distinctive,
+   calm and editorial rather than "AI dashboard" styled.
+   ========================================================= */
+
+.hero-copy,
+.hero-visual,
+#about,
+.timeline article,
+.project,
+.principles article,
+.skill-cloud span,
+.tech-card,
+.quality > div,
+.architecture .node,
+.contact-box {
+  will-change: transform, opacity;
+}
+
+.terminal {
+  transform-style: preserve-3d;
+}
+
+.project {
+  transform-origin: center bottom;
+}
+
+.project:hover {
+  transform: translateY(-5px);
+}
+
+.principles article:hover {
+  transform: translateY(-3px);
+  background: var(--surface);
+}
+
+.skill-cloud span:hover {
+  transform: translateY(-2px);
+}
+
+.architecture .node {
+  transform-origin: center;
+}
+
+.experience-badge {
+  transform-origin: 80% 80%;
+}
+
+.ticker > span {
+  display: inline-block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-copy,
+  .hero-visual,
+  #about,
+  .timeline article,
+  .project,
+  .principles article,
+  .skill-cloud span,
+  .tech-card,
+  .quality > div,
+  .architecture .node,
+  .contact-box {
+    will-change: auto;
+  }
+}
