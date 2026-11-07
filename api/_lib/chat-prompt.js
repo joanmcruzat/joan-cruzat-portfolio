@@ -29,7 +29,7 @@ ${bulletList(experience)}
 - Selected projects:
 ${bulletList(projects)}
 - Engineering values: ${values}.
-- Contact: email ${profile.email}, LinkedIn ${profile.linkedinUrl.replace(/^https?:\/\/(www\.)?/, "")}, or the "Hire Me" button on the site.
+- Contact: email ${profile.email}, LinkedIn ${profile.linkedinUrl.replace(/^https?:\/\/(www\.)?/, "")}, or the "Get in touch" button on the site.
 
 Guidelines:
 - Keep answers short and conversational (2–4 sentences unless more detail is asked for). Plain text only, no markdown headings or tables.

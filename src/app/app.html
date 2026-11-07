@@ -1,35 +1,25 @@
-@if (store.content(); as content) {
-  <div class="app">
-    <app-site-nav [fullName]="content.profile.fullName" (hire)="hireOpen.set(true)" />
+<app-nav (getInTouch)="hireOpen.set(true)" />
 
-    <main id="home">
-      <app-hero-section [profile]="content.profile" (hire)="hireOpen.set(true)" />
-      <app-ticker-strip [items]="content.profile.ticker" />
-      <app-about-section [profile]="content.profile" />
-      <app-experience-section [experience]="content.experience" />
-      <app-projects-section [projects]="content.projects" />
-      <app-engineering-section [principles]="content.principles" />
-      <app-architecture-section />
-      <app-toolbox-section [tools]="content.tools" [qualityAreas]="content.qualityAreas" />
-      <app-contact-section [profile]="content.profile" (hire)="hireOpen.set(true)" />
-    </main>
+<main id="top">
+  <app-hero (getInTouch)="hireOpen.set(true)" />
+  <app-marquee />
+  <app-work />
+  <app-approach />
+  <app-experience />
+  <app-contact />
+</main>
 
-    <app-site-footer [profile]="content.profile" />
+<app-footer />
 
-    @if (hireOpen()) {
-      <app-hire-modal [email]="content.profile.email" (closed)="hireOpen.set(false)" />
-    }
-
-    <app-chat-widget [fullName]="content.profile.fullName" [linkedinUrl]="content.profile.linkedinUrl" />
-  </div>
-} @else if (store.hasError()) {
-  <div class="app-state" role="alert">
-    <p>The portfolio couldn't load right now.</p>
-    <button class="primary" (click)="store.reload()">Try again</button>
-  </div>
-} @else {
-  <div class="app-state" aria-busy="true">
-    <span class="pulse"></span>
-    <p>Loading…</p>
-  </div>
+<!-- Loaded on demand so the form code stays out of the initial bundle. -->
+@if (hireOpen()) {
+  @defer {
+    <app-hire-modal [email]="site.email" (closed)="hireOpen.set(false)" />
+  }
 }
+
+@defer (on idle) {
+  <app-chat-widget [fullName]="site.fullName" [linkedinUrl]="site.linkedinUrl" />
+}
+
+<app-cursor />

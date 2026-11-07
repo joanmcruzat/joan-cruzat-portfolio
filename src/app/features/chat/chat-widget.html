@@ -41,7 +41,8 @@
     [attr.aria-expanded]="isOpen()"
     [attr.aria-label]="isOpen() ? 'Close chat' : 'Open chat'"
   >
-    <span class="chat-avatar" aria-hidden="true">{{ isOpen() ? '×' : initials() }}</span>
+    <!-- Drawn from a data attribute so the decorative initials stay out of the button's accessible name. -->
+    <span class="chat-avatar glyph" aria-hidden="true" [attr.data-glyph]="isOpen() ? '×' : initials()"></span>
     @if (!isOpen()) {
       <span class="chat-dot" aria-hidden="true"></span>
     }

@@ -1,26 +1,44 @@
-# Joan Cruzat Portfolio — Angular + Vercel + Supabase
+# Joan Cruzat Portfolio — Angular + Vercel
 
-An Angular portfolio whose content (profile, experience, projects, skills, principles, toolbox and page metadata) lives in Supabase Postgres. Vercel functions serve that content, send Hire Me inquiries through Resend, and power the AI chat assistant, which builds its knowledge from the same database rows.
+A dark, single-page Angular portfolio, prerendered to static HTML at build time. Page copy lives in typed files under `src/app/content/`. Vercel functions send "Get in touch" inquiries through Resend and power the AI chat assistant, whose knowledge comes from Supabase Postgres.
+
+The approved visual design is [`design/design-reference.html`](design/design-reference.html).
 
 ## Architecture
 
 ```text
-Browser (Angular, zoneless, signals)
-  GET  /api/content  -> api/content.js  -> Supabase REST (publishable key, read-only via RLS)
-  POST /api/chat     -> api/chat.js     -> same content -> system prompt -> Claude
+Browser (Angular 21, zoneless, signals, prerendered + hydrated)
+  page copy          -> src/app/content/*.ts (compiled in, no request)
+  POST /api/chat     -> api/chat.js     -> Supabase content -> system prompt -> Claude
   POST /api/contact  -> api/contact.js  -> Resend -> Joan's inbox
 ```
 
 | Path | Responsibility |
 |---|---|
-| `src/app/core/` | App-wide pieces: content model and store, page metadata, theme, layout (nav, footer), HTTP problem details |
-| `src/app/features/portfolio/` | Presentational page sections, fed by signal inputs |
-| `src/app/features/hire/` | Hire Me dialog (typed reactive form) and its API client |
-| `src/app/features/chat/` | Chat widget and its API client |
-| `src/app/shared/motion/` | `appReveal` entrance animation directive (Motion) |
-| `src/styles/` | Global design system, one partial per section, loaded in order from `angular.json` |
-| `api/_lib/` | Shared function code (not deployed as endpoints): HTTP helpers, content repository, chat prompt, validation, rate limit |
-| `db/` | SQL migrations and the content seed |
+| `src/app/content/` | All page copy and links: `site.ts`, `projects.ts`, `experience.ts`, `principles.ts`, `stack.ts` |
+| `src/app/layout/` | Sticky nav and footer |
+| `src/app/sections/` | Page sections: hero, marquee, work, approach, experience, contact |
+| `src/app/ui/` | Presentational pieces: portrait stage, project row, principle card, architecture diagram, count-up |
+| `src/app/directives/` | `appReveal` scroll-reveal directive and the shared IntersectionObserver helper |
+| `src/app/features/hire/` | "Get in touch" dialog (typed reactive form), lazy-loaded with `@defer` |
+| `src/app/features/chat/` | AI chat widget, lazy-loaded with `@defer (on idle)` |
+| `src/styles/` | `_tokens.scss` (design tokens), `_typography.scss`, `_motion.scss` (keyframes, reveal states, reduced motion) |
+| `api/_lib/` | Shared function code (not deployed as endpoints) |
+| `db/` | SQL migrations and the chat's content seed |
+
+## Editing the site
+
+**Copy, projects, experience, principles, stack.** Edit the matching file in `src/app/content/`. Templates loop over these arrays, so adding a project is adding an object to `PROJECTS`. A project's `result` is either `{ kind: 'metric', value, label }` (big number) or `{ kind: 'note', text }` (muted text; `\n` breaks the line). Set `caseStudyUrl` on a project to turn its whole row into a link.
+
+**Keep the chat in sync.** The chat assistant answers from `db/seed.sql`, not from the TypeScript files. When you change facts (years, roles, projects), update the seed too and run `npm run db:seed`.
+
+**Swap the portrait.** Replace `src/assets/images/joan-portrait.webp` with a background-removed image. If its pixel size changes, update `width`/`height` on the `<img>` in `src/app/ui/portrait-stage.ts` so the layout doesn't shift. Regenerate `src/assets/images/og-image.png` (1200×630, used for social previews) if the hero changes.
+
+**Change the accent colour.** Edit `--accent` in `src/styles/_tokens.scss`. Glows and borders derive from it with `color-mix()`.
+
+**Résumé.** Replace `src/assets/resume.pdf`.
+
+**Motion.** Hero entrance, portrait float and marquee are CSS animations. Sections use the `appReveal` directive (`appReveal="left"` slides in from the left, `[revealIndex]` staggers by 80 ms). Under `prefers-reduced-motion: reduce` every animation is off and the counter shows 9 immediately. Without JavaScript, everything renders visible.
 
 ## 1. Local development
 
@@ -29,13 +47,13 @@ npm install
 npx vercel env pull .env.local
 ```
 
-Run the site and the `/api` functions together with Vercel's dev server (plain `npm start` serves only Angular, so every `/api/*` call returns 404):
+`npm start` serves the page on its own (copy is compiled in). To exercise the chat and contact form too, run the `/api` functions alongside it with Vercel's dev server:
 
 ```bash
 npx vercel dev
 ```
 
-`vercel dev` reads only `.env`, so it must contain `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY` (copy them from `.env.local`; both are safe to expose because row-level security makes the key read-only), plus the Resend and Anthropic keys. Without the Supabase values, `/api/content` answers 503 and the page shows "The portfolio couldn't load right now."
+`vercel dev` reads only `.env`, so it must contain `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY` (copy them from `.env.local`; both are safe to expose because row-level security makes the key read-only), plus the Resend and Anthropic keys. Without the Supabase values the chat can't load its knowledge and answers with an error.
 
 Tests and checks:
 
@@ -46,15 +64,15 @@ npm run verify      # static security and wiring checks
 npm run build
 ```
 
-## 2. Editing content
+## 2. Chat knowledge base
 
-All site content is in [`db/seed.sql`](db/seed.sql). Edit it, then apply it:
+The chat assistant's knowledge is in [`db/seed.sql`](db/seed.sql). Edit it, then apply it:
 
 ```bash
 npm run db:seed
 ```
 
-The seed rewrites every content table in one transaction. The site picks up changes within about 5 minutes (CDN and function caches).
+The seed rewrites every content table in one transaction. The chat picks up changes within about 5 minutes (function cache).
 
 Schema changes go in a new numbered file in `db/migrations/` (never edit an applied one), applied with:
 
@@ -108,9 +126,9 @@ Never put `RESEND_API_KEY` in Angular source code.
 
 Vercel deploys each file in `api/` (except `api/_lib/`) as a Node.js function: `GET /api/content`, `POST /api/chat` and `POST /api/contact`. Errors are returned as RFC 9457 problem details (`application/problem+json`) with a visitor-safe `detail`.
 
-## 6. Hire Me flow
+## 6. Contact form flow
 
-Visitor -> Angular modal -> `POST /api/contact` -> Vercel Function -> Resend -> Joan's email.
+Visitor -> "Get in touch" dialog -> `POST /api/contact` -> Vercel Function -> Resend -> Joan's email.
 
 The visitor's email is sent as `Reply-To`, so Joan can reply directly from the received inquiry.
 
@@ -127,15 +145,10 @@ For a high-traffic public form, add a stronger rate-limiting/WAF strategy.
 
 ## 7. Replace placeholders
 
-Contact details, links and page metadata are in the `profile` row of `db/seed.sql`. Replace `src/assets/resume.pdf` to update the resume.
+Contact details and links are in `src/app/content/site.ts` (and the `profile` row of `db/seed.sql` for the chat). Page metadata and Open Graph tags are in `src/index.html`.
 
 ## 8. Free hosting
 
 Vercel supports deploying Angular applications on its platform, including a free deployment path. Resend currently lists a $0 free tier with 3,000 emails/month and 100 emails/day.
 
 Your actual availability and limits are controlled by the providers' current plans and terms.
-
-
-## Motion
-
-The portfolio uses Motion for JavaScript for restrained entrance, viewport, stagger and micro-interaction animations. Motion is installed as a normal npm dependency; run `npm install` after pulling the project. The animation layer does not modify contact, GitHub, LinkedIn, email, Resend, or deployment configuration.
