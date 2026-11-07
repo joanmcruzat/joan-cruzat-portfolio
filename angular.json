@@ -5,7 +5,11 @@
   "projects": {
     "joan-cruzat-portfolio": {
       "projectType": "application",
-      "schematics": {},
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
@@ -22,46 +26,25 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css",
-              "src/styles/01-tokens.css",
-              "src/styles/02-base.css",
-              "src/styles/03-nav.css",
-              "src/styles/04-general.css",
-              "src/styles/05-hero.css",
-              "src/styles/06-hero-terminal.css",
-              "src/styles/07-ticker.css",
-              "src/styles/08-about.css",
-              "src/styles/09-experience.css",
-              "src/styles/10-projects.css",
-              "src/styles/11-engineering.css",
-              "src/styles/12-architecture.css",
-              "src/styles/13-skills.css",
-              "src/styles/14-contact.css",
-              "src/styles/15-footer.css",
-              "src/styles/16-hire-modal.css",
-              "src/styles/17-responsive.css",
-              "src/styles/18-reduced-motion.css",
-              "src/styles/19-motion.css",
-              "src/styles/20-toolbox.css",
-              "src/styles/21-toolbox-quality.css",
-              "src/styles/22-toolbox-responsive.css",
-              "src/styles/23-chat.css",
-              "src/styles/24-app-state.css"
+              "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "inlineStyleLanguage": "scss",
+            "server": "src/main.server.ts",
+            "outputMode": "static"
           },
           "configurations": {
             "production": {
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "1mb",
-                  "maximumError": "2mb"
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "20kb",
-                  "maximumError": "30kb"
+                  "maximumWarning": "6kb",
+                  "maximumError": "12kb"
                 }
               ],
               "outputHashing": "all"

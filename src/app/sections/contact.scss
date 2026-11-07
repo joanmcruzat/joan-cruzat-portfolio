@@ -1,0 +1,73 @@
+section {
+  position: relative;
+  overflow: hidden;
+  padding: 160px 0 140px;
+  text-align: center;
+
+  // Soft copper glow behind the content.
+  &::before {
+    content: '';
+    position: absolute;
+    top: 40px;
+    left: 50%;
+    width: 900px;
+    height: 500px;
+    margin-left: -450px;
+    background: radial-gradient(closest-side, color-mix(in srgb, var(--accent) 14%, transparent), transparent);
+    pointer-events: none;
+  }
+}
+
+.inner {
+  position: relative;
+}
+
+.eyebrow {
+  justify-content: center;
+  margin: 0;
+}
+
+.title {
+  margin-top: 28px;
+  font-size: clamp(44px, 7vw, 104px);
+}
+
+.text {
+  max-width: 520px;
+  margin: 28px auto 0;
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.mail {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 56px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: clamp(24px, 3.2vw, 44px);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  overflow-wrap: anywhere;
+  transition: border-color 0.3s, color 0.3s;
+
+  .arr {
+    color: var(--accent);
+    transition: transform 0.4s var(--ease);
+  }
+
+  &:hover {
+    border-color: var(--accent);
+  }
+
+  &:hover .arr {
+    transform: translate(6px, -6px);
+  }
+}
+
+.link-row {
+  justify-content: center;
+  margin-top: 28px;
+}

@@ -1,0 +1,161 @@
+:host {
+  position: relative;
+  display: block;
+  width: 100%;
+  max-width: 480px;
+  height: 640px;
+  margin-left: auto;
+  animation: fade-in 1.4s 0.2s var(--ease) both;
+}
+
+// Bottom-anchored arch with a copper glow and a faint grid; the head breaks out above it.
+.arch {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 76%;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+  border-radius: 240px 240px 28px 28px;
+  background:
+    radial-gradient(120% 70% at 50% 0%, color-mix(in srgb, var(--accent) 30%, transparent), color-mix(in srgb, var(--accent) 6%, transparent) 55%, transparent 80%),
+    linear-gradient(180deg, #1a1716, #121112);
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 40px 40px;
+    opacity: 0.6;
+    mask-image: radial-gradient(80% 60% at 50% 30%, #000, transparent 75%);
+    -webkit-mask-image: radial-gradient(80% 60% at 50% 30%, #000, transparent 75%);
+  }
+}
+
+.ring {
+  position: absolute;
+  top: 6%;
+  left: 50%;
+  width: 380px;
+  height: 380px;
+  margin-left: -190px;
+  border: 1px dashed color-mix(in srgb, var(--accent) 28%, transparent);
+  border-radius: 50%;
+  animation: spin 48s linear infinite;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: 50%;
+    width: 8px;
+    height: 8px;
+    margin-left: -4px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 18px var(--accent);
+  }
+}
+
+.float {
+  position: absolute;
+  inset: 0;
+  animation: float 7s ease-in-out infinite;
+}
+
+.portrait {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  display: block;
+  width: 90%;
+  height: auto;
+  transform: translateX(-50%);
+  filter: drop-shadow(0 0 1px color-mix(in srgb, var(--accent) 50%, transparent)) drop-shadow(0 20px 40px rgba(0, 0, 0, 0.55));
+  mask-image: linear-gradient(180deg, #000 82%, transparent 99%);
+  -webkit-mask-image: linear-gradient(180deg, #000 82%, transparent 99%);
+}
+
+.chip {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  background: rgba(20, 20, 22, 0.78);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+  font-size: 13px;
+  white-space: nowrap;
+
+  b {
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+}
+
+.chip-label {
+  color: var(--muted);
+  line-height: 1.3;
+  white-space: pre-line;
+}
+
+.code {
+  color: var(--accent);
+}
+
+.chip-a {
+  top: 34%;
+  left: -28px;
+  animation: float 6s ease-in-out infinite, fade-up 1s 1s var(--ease) both;
+}
+
+.chip-b {
+  top: 50%;
+  right: -24px;
+  animation: float 8s -2s ease-in-out infinite, fade-up 1s 1.15s var(--ease) both;
+}
+
+.chip-c {
+  bottom: 9%;
+  left: -12px;
+  animation: float 7s -4s ease-in-out infinite, fade-up 1s 1.3s var(--ease) both;
+}
+
+@media (max-width: 960px) {
+  :host {
+    height: 540px;
+    margin: 24px auto 0;
+  }
+
+  .ring {
+    width: 300px;
+    height: 300px;
+    margin-left: -150px;
+  }
+
+  .chip-a { left: 0; }
+  .chip-b { right: 0; }
+  .chip-c { left: 8px; }
+}
+
+@media (max-width: 560px) {
+  :host {
+    height: 460px;
+  }
+
+  .chip {
+    padding: 10px 12px;
+    font-size: 12px;
+
+    b {
+      font-size: 16px;
+    }
+  }
+}

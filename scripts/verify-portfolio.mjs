@@ -12,10 +12,14 @@ const required = [
   "src/app/app.ts",
   "src/app/app.html",
   "src/app/app.config.ts",
-  "src/app/core/content/portfolio-content.store.ts",
-  "src/app/core/theme/theme.service.ts",
+  "src/app/app.routes.server.ts",
+  "src/main.server.ts",
+  "src/app/content/site.ts",
+  "src/app/content/projects.ts",
   "src/app/features/hire/contact-api.ts",
-  "src/styles/01-tokens.css",
+  "src/styles/_tokens.scss",
+  "src/assets/images/joan-portrait.webp",
+  "src/assets/resume.pdf",
   "api/content.js",
   "api/contact.js",
   "api/chat.js",
@@ -41,24 +45,25 @@ function sourceFiles(dir) {
 }
 
 const frontend = sourceFiles("src").filter((file) => /\.(ts|html)$/.test(file)).map(read).join("\n");
-const theme = read("src/app/core/theme/theme.service.ts");
 const contactApi = read("src/app/features/hire/contact-api.ts");
 const hireTemplate = read("src/app/features/hire/hire-modal.html");
 const contact = read("api/contact.js");
 const inquiry = read("api/_lib/inquiry.js");
 const repository = read("api/_lib/content-repository.js");
 const migration = read("db/migrations/001_portfolio_content.sql");
-const tokens = read("src/styles/01-tokens.css");
+const tokens = read("src/styles/_tokens.scss");
+const motion = read("src/styles/_motion.scss");
+const angular = JSON.parse(read("angular.json"));
+const buildOptions = angular.projects["joan-cruzat-portfolio"].architect.build.options;
 const pkg = JSON.parse(read("package.json"));
 
 const checks = [
   ["Angular build script", pkg.scripts?.build === "ng build"],
   ["Angular test script", pkg.scripts?.test?.startsWith("ng test")],
-  ["Theme toggle persists", theme.includes("localStorage.setItem(THEME_STORAGE_KEY")],
-  ["Theme restores on startup", theme.includes("localStorage.getItem(THEME_STORAGE_KEY")],
-  ["Light theme CSS exists", tokens.includes("html.light {")],
+  ["Accent is a single token", tokens.includes("--accent:")],
+  ["Reduced motion disables animation", motion.includes("prefers-reduced-motion: reduce")],
+  ["Homepage is prerendered", buildOptions.outputMode === "static" && buildOptions.server === "src/main.server.ts"],
   ["Hire Me endpoint", contactApi.includes("'/api/contact'")],
-  ["Content loads from API", read("src/app/core/content/portfolio-content.store.ts").includes("'/api/content'")],
   ["Reply-To configured", contact.includes("reply_to: inquiry.email")],
   ["Resend server-side key", contact.includes("process.env.RESEND_API_KEY")],
   ["HTML email escapes input", inquiry.includes("escapeHtml(inquiry.message)")],

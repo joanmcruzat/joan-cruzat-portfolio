@@ -40,6 +40,14 @@ describe('ChatWidget', () => {
     return [...fixture.nativeElement.querySelectorAll('.chat-msg')].map((m: Element) => m.textContent?.trim() ?? '');
   }
 
+  it('keeps the launcher initials out of its text so the label matches its accessible name', async () => {
+    const launcher: HTMLButtonElement = fixture.nativeElement.querySelector('.chat-launcher');
+
+    expect(launcher.getAttribute('aria-label')).toBe('Open chat');
+    expect(launcher.textContent?.trim()).toBe('');
+    expect(launcher.querySelector('.chat-avatar')?.getAttribute('data-glyph')).toBe('AL');
+  });
+
   it('greets the visitor with the owner name and LinkedIn link', async () => {
     await open();
 

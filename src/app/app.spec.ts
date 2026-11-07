@@ -1,83 +1,63 @@
 import { provideHttpClient } from '@angular/common/http';
-import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideZonelessChangeDetection } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
-import { Meta, Title } from '@angular/platform-browser';
-import { buildContent, buildProfile } from '../testing/portfolio-content.fixture';
+import { ComponentFixture, DeferBlockState, TestBed } from '@angular/core/testing';
 import { App } from './app';
-import { CONTENT_URL } from './core/content/portfolio-content.store';
+import { EXPERIENCE } from './content/experience';
+import { PRINCIPLES } from './content/principles';
+import { PROJECTS } from './content/projects';
+import { SITE } from './content/site';
 
 describe('App', () => {
-  let http: HttpTestingController;
+  let fixture: ComponentFixture<App>;
+  let el: HTMLElement;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     TestBed.configureTestingModule({
+      imports: [App],
       providers: [provideZonelessChangeDetection(), provideHttpClient(), provideHttpClientTesting()]
     });
-    http = TestBed.inject(HttpTestingController);
+    await TestBed.compileComponents(); // resolves the @defer dependencies
+    fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+    el = fixture.nativeElement;
   });
 
-  afterEach(() => http.verify());
+  it('has a single h1 with the hero headline', () => {
+    const headings = el.querySelectorAll('h1');
 
-  // whenStable() would wait for the pending content request, so render with tick() first.
-  function render() {
-    const fixture = TestBed.createComponent(App);
-    TestBed.tick();
-    return fixture;
-  }
-
-  it('shows a loading state until the content arrives', async () => {
-    const fixture = render();
-
-    expect(fixture.nativeElement.textContent).toContain('Loading…');
-    http.expectOne(CONTENT_URL);
+    expect(headings).toHaveLength(1);
+    expect(headings[0]?.textContent).toContain('Software that');
+    expect(headings[0]?.textContent).toContain('minimum.');
   });
 
-  it('renders the sections from the loaded content', async () => {
-    const fixture = render();
-
-    http.expectOne(CONTENT_URL).flush(buildContent({ profile: buildProfile({ heroHighlight: 'ship reliable systems.' }) }));
-    await fixture.whenStable();
-
-    const text: string = fixture.nativeElement.textContent;
-    expect(text).toContain('ship reliable systems.');
-    expect(text).toContain('Payment gateway.');
-    expect(text).toContain('Fast queries.');
+  it('renders every section the nav links to', () => {
+    for (const item of SITE.nav) {
+      expect(el.querySelector(`section#${item.id}`), item.id).not.toBeNull();
+    }
   });
 
-  it('applies the profile metadata to the document', async () => {
-    const fixture = render();
+  it('renders projects, principles and experience from the content files', () => {
+    const text = el.textContent ?? '';
 
-    http.expectOne(CONTENT_URL).flush(buildContent());
-    await fixture.whenStable();
-
-    expect(TestBed.inject(Title).getTitle()).toBe('Ada Lovelace | Engineer');
-    expect(TestBed.inject(Meta).getTag('name="description"')?.content).toBe('Ada builds systems.');
+    for (const project of PROJECTS) expect(text).toContain(project.title);
+    for (const principle of PRINCIPLES) expect(text).toContain(principle.title);
+    for (const job of EXPERIENCE) expect(text).toContain(job.role);
   });
 
-  it('shows an error with a retry button when the content fails to load', async () => {
-    const fixture = render();
-
-    http.expectOne(CONTENT_URL).flush(null, { status: 503, statusText: 'Service Unavailable' });
-    await fixture.whenStable();
-    expect(fixture.nativeElement.textContent).toContain("The portfolio couldn't load right now.");
-
-    fixture.nativeElement.querySelector('.app-state button').click();
-    TestBed.tick();
-    http.expectOne(CONTENT_URL).flush(buildContent());
-    await fixture.whenStable();
-
-    expect(fixture.nativeElement.textContent).toContain('Payment gateway.');
+  it('links the contact email with mailto', () => {
+    expect(el.querySelector('#contact a.mail')?.getAttribute('href')).toBe(`mailto:${SITE.email}`);
   });
 
-  it('opens the Hire Me dialog from the navigation', async () => {
-    const fixture = render();
-    http.expectOne(CONTENT_URL).flush(buildContent());
-    await fixture.whenStable();
+  it('hides the decorative marquee from assistive technology', () => {
+    expect(el.querySelector('app-marquee')?.getAttribute('aria-hidden')).toBe('true');
+  });
 
-    fixture.nativeElement.querySelector('.hire-btn').click();
+  it('opens the contact dialog from the nav button', async () => {
+    (el.querySelector('app-nav .cta') as HTMLButtonElement).click();
     await fixture.whenStable();
+    for (const block of await fixture.getDeferBlocks()) await block.render(DeferBlockState.Complete);
 
-    expect(fixture.nativeElement.querySelector('[role="dialog"][aria-modal="true"]')).not.toBeNull();
+    expect(el.querySelector('[role="dialog"][aria-modal="true"]')).not.toBeNull();
   });
 });

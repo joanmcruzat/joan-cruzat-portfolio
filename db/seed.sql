@@ -1,4 +1,5 @@
--- Portfolio content. Edit this file and run `npm run db:seed` to replace what the site shows.
+-- Knowledge base for the AI chat assistant (api/chat.js). The page itself renders from
+-- src/app/content/*.ts, so keep the two in sync when copy changes. Apply with `npm run db:seed`.
 -- The seed is idempotent: it rewrites every content table inside one transaction.
 
 begin;
@@ -12,14 +13,14 @@ insert into profile (
   1,
   'Joan Cruzat',
   'Senior Full Stack Engineer',
-  'Available for selected remote opportunities',
-  'I build scalable systems, APIs, and experiences that',
-  'solve real business problems.',
-  'Senior Full Stack Engineer specializing in .NET, Angular, REST APIs, databases, integrations, and modern web applications.',
-  '8+',
+  'Open to selected remote roles',
+  'Software that works is the',
+  'minimum.',
+  'Senior full-stack engineer with 9+ years in .NET and Angular, building fintech integrations, payment flows, and the dashboards teams run them from.',
+  '9+',
   array['.NET', 'Angular', 'APIs', 'Databases'],
   array['reliable', 'scalable', 'maintainable'],
-  array['Engineering with purpose', 'Full stack', 'API integrations', 'Fintech', 'Cloud', 'Performance'],
+  array['Fintech integrations', 'Payment gateways', 'KYC · MFA · SSO', 'REST APIs', 'Operator dashboards', 'SQL performance', 'AWS'],
   'More than shipping code.',
   array[
     'I build reliable software by combining clean architecture, practical engineering, and a strong understanding of business requirements.',
@@ -27,16 +28,16 @@ insert into profile (
   ],
   'The goal isn''t simply to make software work. It''s to make it reliable, understandable, secure, and ready for the next change.',
   '.NET · Angular · APIs · Cloud · Databases',
-  'Have a challenging system to build?',
-  'Let''s talk about how I can help build, modernize, integrate, or scale it.',
+  'Have a system that needs to just work?',
+  'I''m open to selected remote roles and contract work: building, modernizing, integrating or scaling.',
   'Senior Full Stack Engineer',
   'joanmcruzat@gmail.com',
   'https://github.com/joanmcruzat',
   'https://linkedin.com/in/joan-cruzat',
   '/assets/resume.pdf',
   'Joan Cruzat | Senior Full Stack Engineer',
-  'Joan Cruzat — Senior Full Stack Engineer specializing in .NET, Angular, APIs, databases, integrations and cloud.',
-  'Building scalable systems, APIs and experiences that solve real business problems.'
+  'Senior full-stack engineer (.NET, Angular) building secure fintech integrations, payment flows and operator dashboards.',
+  'Senior full-stack engineer (.NET, Angular) building secure fintech integrations, payment flows and operator dashboards.'
 )
 on conflict (id) do update set
   full_name = excluded.full_name,
@@ -67,35 +68,35 @@ on conflict (id) do update set
 truncate experience, project, skill, principle, tool, quality_area restart identity;
 
 insert into experience (sort_order, period, role, company, description, tech) values
-  (1, '2022 — 2026', 'Senior / .NET Full Stack Engineer', 'Xentra Solutions',
-   'Built enterprise-grade .NET applications and REST APIs, optimized SQL queries and stored procedures, designed database structures, delivered financial integrations and microservices, and worked across AWS, Linux, CI/CD, logging and deployment.',
-   array['.NET Core', 'Angular', 'MySQL', 'AWS', 'Microservices']),
-  (2, '2020 — 2026', 'Angular Frontend Developer', null,
-   'Built complex Angular applications and operator dashboards with reporting, graphs, reusable components, forms, settings and REST API integration using TypeScript, RxJS, Angular Material and Tailwind CSS.',
+  (1, '2022 — Now', 'Senior .NET Full Stack Engineer', 'Xentra Solutions',
+   'Enterprise .NET applications, REST APIs, financial integrations and microservices on AWS. Tuned SQL queries and stored procedures, cutting key query times by up to 90%.',
+   array['.NET', 'Angular', 'MySQL', 'AWS', 'Microservices']),
+  (2, '2020 — Now', 'Angular Frontend Developer', 'Concurrent role',
+   'Operator dashboards with reporting and charts, reusable components and complex forms, in TypeScript, RxJS, Angular Material and Tailwind CSS.',
    array['Angular', 'TypeScript', 'RxJS', 'Jasmine']),
-  (3, '2016 — 2020', 'PHP Full Stack Developer', null,
-   'Developed database-driven academic information management systems and full-stack applications using PHP, JavaScript, HTML, CSS and relational databases.',
+  (3, '2016 — 2020', 'PHP Full Stack Developer', 'Academic systems',
+   'Database-driven academic information systems and full-stack web apps in PHP, JavaScript and SQL.',
    array['PHP', 'JavaScript', 'SQL']);
 
 insert into project (sort_order, title, tag, description, tech) values
-  (1, 'Moolah Play / MarkerTrax', 'Operator Platform',
-   'Angular operator dashboard with reporting, graphs, user management, settings and REST API integration.',
-   array['Angular', 'TypeScript', 'REST APIs', 'Data Visualization']),
-  (2, 'Uniteller Remittance Integration', 'Fintech',
-   'Third-party financial integration involving signup, KYC, MFA, Plaid and backend service workflows.',
+  (1, 'Uniteller Remittance Integration', 'Fintech · Remittance',
+   'End-to-end onboarding and transfer flow for a third-party remittance provider: signup, KYC, MFA and Plaid bank linking, backed by .NET services. 10k+ transactions processed.',
    array['.NET', 'REST APIs', 'Plaid', 'KYC', 'MFA']),
+  (2, 'Moolah Play / MarkerTrax', 'Operator platform',
+   'An Angular operator dashboard for reporting, charts, user management and settings, connected to REST APIs. 1k+ active users.',
+   array['Angular', 'TypeScript', 'REST APIs', 'Data viz']),
   (3, 'NMI Payment Gateway', 'Payments',
-   'Payment gateway integration covering card management, vault concepts, transaction processing and database design.',
+   'Card payments end to end: tokenized card storage, transaction processing, and a database design built for traceability.',
    array['.NET', 'Payment APIs', 'SQL', 'Security']),
-  (4, 'Usio GPR / Akimbo', 'Financial Services',
-   'Card integration with SSO, token handling and coordinated frontend/backend architecture.',
-   array['.NET', 'Angular', 'SSO', 'API Integration']),
-  (5, 'Bloxcross Crypto Integration', 'API Security',
-   'Secure service integration using HMAC authentication, JWT, API logging, validation and error handling.',
+  (4, 'Usio GPR / Akimbo', 'Financial services',
+   'Prepaid card integration with single sign-on and token handling, coordinating the Angular frontend and .NET backend.',
+   array['.NET', 'Angular', 'SSO', 'API integration']),
+  (5, 'Bloxcross Crypto Integration', 'API security',
+   'A .NET 8 service integration secured with HMAC request signing and JWT, plus structured logging, validation and clear error handling.',
    array['.NET 8', 'HMAC', 'JWT', 'Microservices']),
   (6, 'Academic Information Management', 'Education',
-   'Database-driven academic information systems built through full-stack PHP development.',
-   array['PHP', 'JavaScript', 'HTML', 'SQL']);
+   'Database-driven systems for student records and academic workflows, built full stack in PHP.',
+   array['PHP', 'JavaScript', 'SQL']);
 
 insert into skill (sort_order, name) values
   (1, '.NET'), (2, 'C#'), (3, 'Angular'), (4, 'TypeScript'), (5, 'REST APIs'), (6, 'SQL Server'),
@@ -103,12 +104,12 @@ insert into skill (sort_order, name) values
   (13, 'CI/CD'), (14, 'Playwright');
 
 insert into principle (sort_order, title, description) values
-  (1, 'Performance', 'Query plans, indexing, caching, payload size and scalability—not just whether an endpoint returns 200.'),
-  (2, 'Maintainability', 'Clear abstractions, reusable components and code that another engineer can understand six months later.'),
-  (3, 'Security', 'Authentication, authorization, validation, sensitive data handling, secure integrations and useful logging.'),
-  (4, 'Reliability', 'Validation, failure scenarios, error handling, retries where appropriate, observability and operational thinking.'),
-  (5, 'Scalability', 'Database growth, API traffic, caching, asynchronous processing and sensible service boundaries.'),
-  (6, 'Developer Experience', 'Documentation, testing, automation and CI/CD that help teams deliver confidently.');
+  (1, 'Performance', 'Query plans, indexing, caching and payload size. A 200 response is the start, not the goal.'),
+  (2, 'Maintainability', 'Clear abstractions and code another engineer can follow six months later.'),
+  (3, 'Security', 'Authentication, validation, careful handling of sensitive data, and logs that actually help.'),
+  (4, 'Reliability', 'Failure scenarios, retries where they make sense, and observability from day one.'),
+  (5, 'Scalability', 'Planning for data growth, traffic, async work and sensible service boundaries.'),
+  (6, 'Developer experience', 'Docs, tests and CI/CD that let a team ship with confidence.');
 
 insert into tool (sort_order, name, description, icon_url, icon_alt) values
   (1, '.NET', 'Backend & APIs', 'https://cdn.jsdelivr.net/gh/devicons/devicon@master/icons/dot-net/dot-net-original.svg', '.NET'),
