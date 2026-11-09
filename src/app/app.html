@@ -2,7 +2,7 @@
 
 <main id="top">
   @if (content(); as content) {
-    <app-hero [profile]="content.profile" (getInTouch)="openHire('hero')" />
+    <app-hero [profile]="content.profile" [visitors]="visitors()" (getInTouch)="openHire('hero')" />
     <app-marquee [items]="content.profile.marquee" />
     <app-work [copy]="content.sections.work" [projects]="content.projects" />
     <app-approach [copy]="content.sections.approach" [principles]="content.principles" />
@@ -19,7 +19,7 @@
 </main>
 
 @if (profile(); as profile) {
-  <app-footer [fullName]="profile.fullName" [visitors]="visitors()" />
+  <app-footer [fullName]="profile.fullName" />
 
   <!-- Loaded on demand so the form code stays out of the initial bundle. -->
   @if (hireOpen()) {

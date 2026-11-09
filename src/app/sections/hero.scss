@@ -11,6 +11,13 @@
   padding: 56px 0 72px;
 }
 
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  min-height: 34px;
+}
+
 .pill {
   display: inline-flex;
   align-items: center;
@@ -41,6 +48,16 @@
     background: var(--status);
     animation: ping 2.2s cubic-bezier(0, 0, 0.2, 1) infinite;
   }
+}
+
+.dot.live,
+.dot.live::after {
+  background: var(--accent);
+}
+
+.count {
+  color: var(--text);
+  font-weight: 500;
 }
 
 .h1 {
@@ -103,5 +120,14 @@
     grid-template-columns: minmax(0, 1fr);
     min-height: 0;
     padding-top: 40px;
+  }
+}
+
+// On phones the two pills stack; keep room for both so the second one doesn't push the headline down.
+@media (max-width: 560px) {
+  .pills {
+    flex-direction: column;
+    align-items: flex-start;
+    min-height: 78px;
   }
 }
