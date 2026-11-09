@@ -1,0 +1,46 @@
+.mono {
+  font-family: var(--font-mono);
+}
+
+// Signature accent words: Instrument Serif italic in the accent colour.
+.serif {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--accent);
+  letter-spacing: -0.01em;
+}
+
+.h1 {
+  margin: 0;
+  font-size: clamp(44px, 6.4vw, 92px);
+  font-weight: 500;
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+}
+
+.h2 {
+  margin: 20px 0 0;
+  font-size: clamp(36px, 4.6vw, 64px);
+  font-weight: 500;
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+}
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+
+  &::before {
+    content: '';
+    width: 28px;
+    height: 1px;
+    background: var(--accent);
+  }
+}

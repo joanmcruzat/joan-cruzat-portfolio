@@ -11,7 +11,9 @@ const SEND_FAILED = 'Unable to send right now. Please use the email or LinkedIn 
   selector: 'app-hire-modal',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [ReactiveFormsModule],
-  templateUrl: './hire-modal.html'
+  templateUrl: './hire-modal.html',
+  styleUrl: './hire-modal.scss',
+  host: { '(document:keydown.escape)': 'close()' }
 })
 export class HireModal {
   readonly email = input.required<string>();

@@ -7,12 +7,14 @@ import { problemDetail } from '../../core/http/problem-details';
 import { ChatApi, ChatMessage } from './chat-api';
 
 const MAX_MESSAGE_CHARS = 1500;
-const REPLY_FAILED = 'Sorry, I can\'t respond right now. Please use the Hire Me form or email instead.';
+const REPLY_FAILED = 'Sorry, I can\'t respond right now. Please use the Get in touch form or email instead.';
 
 @Component({
   selector: 'app-chat-widget',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl: './chat-widget.html'
+  templateUrl: './chat-widget.html',
+  styleUrl: './chat-widget.scss',
+  host: { '(document:keydown.escape)': 'close()' }
 })
 export class ChatWidget {
   readonly fullName = input.required<string>();

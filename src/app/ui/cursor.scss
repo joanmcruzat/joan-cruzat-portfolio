@@ -1,0 +1,81 @@
+// Position comes from the `translate` property (set in JS); `transform` only centres and scales.
+:host {
+  position: fixed;
+  inset: 0 auto auto 0;
+  z-index: 1000;
+  pointer-events: none;
+  display: none;
+}
+
+:host(.is-active) {
+  display: block;
+}
+
+.dot,
+.frame {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  transition: opacity 0.25s, transform 0.3s var(--ease), width 0.3s var(--ease), height 0.3s var(--ease);
+}
+
+:host(.is-visible) .dot,
+:host(.is-visible) .frame {
+  opacity: 1;
+}
+
+// Hide over text fields so the native I-beam is the only cursor.
+:host(.is-over-text) .dot,
+:host(.is-over-text) .frame {
+  opacity: 0;
+}
+
+.dot {
+  width: 5px;
+  height: 5px;
+  background: var(--accent);
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--accent) 60%, transparent);
+}
+
+.frame {
+  width: 26px;
+  height: 26px;
+  transform: translate(-50%, -50%);
+
+  i {
+    position: absolute;
+    width: 7px;
+    height: 7px;
+    border: 0 solid var(--text-soft);
+    opacity: 0.55;
+    transition: border-color 0.3s, opacity 0.3s;
+
+    &:nth-child(1) { top: 0; left: 0; border-top-width: 1px; border-left-width: 1px; }
+    &:nth-child(2) { top: 0; right: 0; border-top-width: 1px; border-right-width: 1px; }
+    &:nth-child(3) { bottom: 0; left: 0; border-bottom-width: 1px; border-left-width: 1px; }
+    &:nth-child(4) { bottom: 0; right: 0; border-bottom-width: 1px; border-right-width: 1px; }
+  }
+}
+
+// Lock-on: the frame widens and the brackets brighten (not accent: it would vanish on the copper button).
+:host(.is-hovering) {
+  .frame {
+    width: 44px;
+    height: 44px;
+
+    i {
+      border-color: var(--text);
+      opacity: 1;
+    }
+  }
+
+  .dot {
+    transform: translate(-50%, -50%) scale(0.6);
+  }
+}
+
+:host(.is-pressed) .frame {
+  transform: translate(-50%, -50%) scale(0.82);
+}

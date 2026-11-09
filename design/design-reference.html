@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Joan Cruzat — Senior Full Stack Engineer (design reference)</title>
+<!-- DESIGN REFERENCE ONLY: static prototype of the redesign. Rebuild in Angular per PROMPT.md. -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&amp;family=Geist+Mono:wght@400;500&amp;family=Instrument+Serif:ital@0;1&amp;display=swap">
+<style>
+body{margin:0;background:#0B0B0C}
+html{scroll-behavior:smooth}
+a{color:#EDEDED;text-decoration:none}a:hover{color:#E39A7B}
+.root{--accent:#E39A7B;--bg:#0B0B0C;--surface:#131315;--line:rgba(255,255,255,.08);--text:#EDEDED;--muted:#A1A1A6;font-family:'Geist',system-ui,sans-serif;color:var(--text);background:var(--bg);-webkit-font-smoothing:antialiased;overflow-x:clip}
+.mono{font-family:'Geist Mono',ui-monospace,monospace}
+.serif{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-weight:400;color:var(--accent);letter-spacing:-.01em}
+.wrap{max-width:1200px;margin:0 auto;padding:0 32px}
+
+/* nav */
+.nav{position:sticky;top:0;z-index:20;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);background:rgba(11,11,12,.72);border-bottom:1px solid var(--line)}
+.nav-links a{color:var(--muted);font-size:14px;transition:color .25s}
+.nav-links a:hover{color:var(--text)}
+.btn{display:inline-flex;align-items:center;gap:10px;min-height:46px;padding:0 22px;border-radius:999px;font-size:15px;font-weight:500;transition:transform .35s cubic-bezier(.2,.8,.2,1),background .3s,color .3s,border-color .3s}
+.btn-primary{background:var(--text);color:#0B0B0C}
+.btn-primary:hover{background:var(--accent);color:#0B0B0C;transform:translateY(-2px)}
+.btn-ghost{border:1px solid rgba(255,255,255,.18);color:var(--text)}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px)}
+.btn .arr{transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.btn:hover .arr{transform:translateX(4px)}
+.link-u{position:relative;color:var(--muted);font-size:14px}
+.link-u::after{content:"";position:absolute;left:0;right:0;bottom:-3px;height:1px;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform .4s cubic-bezier(.2,.8,.2,1)}
+.link-u:hover{color:var(--text)}.link-u:hover::after{transform:scaleX(1)}
+
+/* hero */
+.hero-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:48px;align-items:center;min-height:calc(100vh - 72px);padding:56px 0 72px;box-sizing:border-box}
+.h1{font-size:clamp(44px,6.4vw,92px);line-height:.98;letter-spacing:-.045em;font-weight:500;margin:0}
+.line{display:block;overflow:hidden;padding-bottom:.08em}
+.line > span{display:inline-block;animation:lineUp 1.1s cubic-bezier(.2,.8,.2,1) both}
+.line:nth-child(2) > span{animation-delay:.12s}
+.line:nth-child(3) > span{animation-delay:.24s}
+.fade-in{animation:fadeUp 1s cubic-bezier(.2,.8,.2,1) both}
+.d1{animation-delay:.45s}.d2{animation-delay:.6s}.d3{animation-delay:.75s}.d4{animation-delay:.9s}
+.pill{display:inline-flex;align-items:center;gap:10px;padding:8px 14px 8px 12px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.02);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.dot{position:relative;width:8px;height:8px;border-radius:50%;background:#5BD69A}
+.dot::after{content:"";position:absolute;inset:0;border-radius:50%;background:#5BD69A;animation:ping 2.2s cubic-bezier(0,0,.2,1) infinite}
+
+/* portrait */
+.stage{position:relative;height:640px;max-width:480px;width:100%;margin-left:auto;animation:fadeIn 1.4s .2s cubic-bezier(.2,.8,.2,1) both}
+.arch{position:absolute;left:0;right:0;bottom:0;height:76%;border-radius:240px 240px 28px 28px;background:radial-gradient(120% 70% at 50% 0%,rgba(227,154,123,.30),rgba(227,154,123,.06) 55%,transparent 80%),linear-gradient(180deg,#1A1716,#121112);border:1px solid rgba(227,154,123,.22);overflow:hidden}
+.arch::before{content:"";position:absolute;inset:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:40px 40px;mask-image:radial-gradient(80% 60% at 50% 30%,#000,transparent 75%);-webkit-mask-image:radial-gradient(80% 60% at 50% 30%,#000,transparent 75%);opacity:.6}
+.ring{position:absolute;left:50%;top:6%;width:380px;height:380px;margin-left:-190px;border:1px dashed rgba(227,154,123,.28);border-radius:50%;animation:spin 48s linear infinite}
+.ring::after{content:"";position:absolute;top:-4px;left:50%;width:8px;height:8px;margin-left:-4px;border-radius:50%;background:var(--accent);box-shadow:0 0 18px var(--accent)}
+.float{position:absolute;inset:0;animation:float 7s ease-in-out infinite}
+.portrait{position:absolute;bottom:0;left:50%;width:90%;transform:translateX(-50%);display:block;filter:drop-shadow(0 0 1px rgba(227,154,123,.5)) drop-shadow(0 20px 40px rgba(0,0,0,.55));mask-image:linear-gradient(180deg,#000 82%,transparent 99%);-webkit-mask-image:linear-gradient(180deg,#000 82%,transparent 99%)}
+.chip{position:absolute;display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:16px;background:rgba(20,20,22,.78);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.1);box-shadow:0 18px 40px rgba(0,0,0,.45);font-size:13px;white-space:nowrap}
+.chip b{font-weight:600;font-size:20px;letter-spacing:-.02em}
+.chip-a{left:-28px;top:34%;animation:float 6s ease-in-out infinite,fadeUp 1s 1s both}
+.chip-b{right:-24px;top:50%;animation:float 8s -2s ease-in-out infinite,fadeUp 1s 1.15s both}
+.chip-c{left:-12px;bottom:9%;animation:float 7s -4s ease-in-out infinite,fadeUp 1s 1.3s both}
+
+/* marquee */
+.marquee{border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden;white-space:nowrap;padding:22px 0;mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent)}
+.track{display:inline-flex;gap:56px;animation:marquee 40s linear infinite;padding-right:56px}
+.track span{font-size:15px;color:var(--muted);letter-spacing:.02em}
+.track i{font-style:normal;color:var(--accent)}
+
+/* sections */
+.section{padding:140px 0}
+.eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:12px}
+.eyebrow::before{content:"";width:28px;height:1px;background:var(--accent)}
+.h2{font-size:clamp(36px,4.6vw,64px);line-height:1.02;letter-spacing:-.04em;font-weight:500;margin:20px 0 0}
+
+/* work rows */
+.row{display:grid;grid-template-columns:56px minmax(0,1.1fr) minmax(0,1.5fr) 190px;gap:32px;align-items:start;padding:36px 20px;margin:0 -20px;border-top:1px solid var(--line);border-radius:4px;transition:background .45s cubic-bezier(.2,.8,.2,1)}
+.row:last-child{border-bottom:1px solid var(--line)}
+.row:hover{background:rgba(255,255,255,.025)}
+.row .title{font-size:26px;letter-spacing:-.025em;font-weight:500;margin:6px 0 0;transition:transform .45s cubic-bezier(.2,.8,.2,1),color .3s}
+.row:hover .title{transform:translateX(8px);color:var(--accent)}
+.row .num{color:var(--muted);font-size:13px;padding-top:6px}
+.row .cat{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.row p{margin:4px 0 16px;color:#C9C9CD;font-size:16px;line-height:1.6}
+.tags{display:flex;flex-wrap:wrap;gap:8px}
+.tag{font-size:12px;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:5px 11px}
+.result{text-align:right}
+.result b{display:block;font-size:34px;letter-spacing:-.03em;font-weight:500;color:var(--text)}
+.result span{font-size:13px;color:var(--muted)}
+.result .soft{font-size:14px;color:var(--muted);line-height:1.5}
+
+/* approach */
+.approach-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:72px;margin-top:64px;align-items:start}
+.principles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:20px;overflow:hidden}
+.pr{background:var(--bg);padding:28px 26px;transition:background .4s}
+.pr:hover{background:var(--surface)}
+.pr h3{margin:14px 0 8px;font-size:19px;font-weight:500;letter-spacing:-.02em}
+.pr p{margin:0;color:var(--muted);font-size:14.5px;line-height:1.6}
+.pr .mono{color:var(--accent);font-size:12px}
+.diagram{position:sticky;top:110px;border:1px solid var(--line);border-radius:24px;padding:32px;background:radial-gradient(90% 60% at 50% 0%,rgba(227,154,123,.08),transparent 70%),var(--surface)}
+.node{border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:14px 18px;font-size:15px;display:flex;justify-content:space-between;align-items:center;background:rgba(11,11,12,.6);transition:border-color .3s,transform .3s}
+.node:hover{border-color:var(--accent);transform:translateY(-2px)}
+.node small{font-family:'Geist Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:.06em}
+.flow{width:2px;height:30px;margin:0 auto;background:repeating-linear-gradient(180deg,var(--accent) 0 5px,transparent 5px 11px);background-size:2px 11px;animation:flow .9s linear infinite;opacity:.8}
+.leaf-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.leaf{border:1px dashed rgba(255,255,255,.16);border-radius:12px;padding:12px;font-size:13px;color:#C9C9CD;text-align:center}
+.cloud{margin-top:18px;border:1px dashed rgba(227,154,123,.35);border-radius:14px;padding:12px;text-align:center;font-size:13px;color:var(--accent)}
+.qual{display:flex;justify-content:space-between;margin-top:22px;font-size:11px;letter-spacing:.14em;color:var(--muted)}
+
+/* experience */
+.exp-grid{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:72px;margin-top:64px}
+.big-num{font-size:clamp(120px,14vw,200px);line-height:.85;letter-spacing:-.06em;font-weight:500}
+.count{--n:9;counter-reset:n var(--n);animation:count 2.2s cubic-bezier(.2,.8,.2,1) both}
+.count::before{content:counter(n)}
+.job{display:grid;grid-template-columns:150px minmax(0,1fr);gap:24px;padding:28px 0;border-top:1px solid var(--line)}
+.job:last-child{border-bottom:1px solid var(--line)}
+.job h3{margin:0;font-size:20px;font-weight:500;letter-spacing:-.02em}
+.job .co{color:var(--accent);font-size:14px;margin-top:4px}
+.job p{color:var(--muted);font-size:15px;line-height:1.65;margin:12px 0 0}
+.stack{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:40px 32px;margin-top:96px;padding-top:48px;border-top:1px solid var(--line)}
+.stack h4{margin:0 0 12px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.stack p{margin:0;font-size:16px;line-height:1.75;color:#D6D6DA}
+
+/* contact */
+.contact{padding:160px 0 64px;text-align:center;position:relative;overflow:hidden}
+.contact::before{content:"";position:absolute;left:50%;top:40px;width:900px;height:500px;margin-left:-450px;background:radial-gradient(closest-side,rgba(227,154,123,.14),transparent);pointer-events:none}
+.mail{display:inline-flex;align-items:center;gap:14px;font-size:clamp(24px,3.2vw,44px);letter-spacing:-.03em;font-weight:500;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,.2);transition:border-color .3s,color .3s}
+.mail:hover{border-color:var(--accent)}
+.mail .arr{transition:transform .4s cubic-bezier(.2,.8,.2,1)}
+.mail:hover .arr{transform:translate(6px,-6px)}
+.foot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-top:140px;padding-top:28px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+
+/* scroll-driven reveals */
+@supports (animation-timeline: view()){
+.reveal{animation:fadeUp linear both;animation-timeline:view();animation-range:entry 0% entry 45%}
+.reveal-x{animation:slideIn linear both;animation-timeline:view();animation-range:entry 0% entry 55%}
+.count{animation-timeline:view();animation-range:entry 10% cover 40%;animation-timing-function:linear}
+}
+
+@property --n{syntax:'<integer>';inherits:false;initial-value:0}
+@keyframes count{from{--n:0}to{--n:9}}
+@keyframes lineUp{from{transform:translateY(105%)}to{transform:none}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+@keyframes slideIn{from{opacity:0;transform:translateX(-24px)}to{opacity:1;transform:none}}
+@keyframes fadeIn{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:none}}
+@keyframes float{0%,100%{translate:0 0}50%{translate:0 -12px}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes ping{75%,100%{transform:scale(2.6);opacity:0}}
+@keyframes marquee{to{transform:translateX(-50%)}}
+@keyframes flow{to{background-position:0 11px}}
+
+.still *,.still *::before,.still *::after{animation:none !important;transition:none !important}
+@media (prefers-reduced-motion: reduce){.root *,.root *::before,.root *::after{animation:none !important;transition:none !important;scroll-behavior:auto !important}}
+
+@media (max-width:960px){
+.hero-grid{grid-template-columns:minmax(0,1fr);min-height:0;padding-top:40px}
+.stage{margin:24px auto 0;height:540px}
+.ring{width:300px;height:300px;margin-left:-150px}
+.chip-a{left:0}.chip-b{right:0}.chip-c{left:8px}
+.approach-grid,.exp-grid{grid-template-columns:minmax(0,1fr);gap:48px}
+.diagram{position:relative;top:0}
+.row{grid-template-columns:minmax(0,1fr);gap:12px}
+.result{text-align:left}
+.stack{grid-template-columns:repeat(2,minmax(0,1fr))}
+.nav-links{display:none !important}
+.section{padding:96px 0}
+}
+@media (max-width:560px){
+.wrap{padding:0 20px}
+.principles,.stack{grid-template-columns:minmax(0,1fr)}
+.job{grid-template-columns:minmax(0,1fr);gap:6px}
+.stage{height:460px}
+.chip{font-size:12px;padding:10px 12px}.chip b{font-size:16px}
+.leaf-grid{grid-template-columns:minmax(0,1fr)}
+}
+</style>
+
+</head>
+<body>
+
+
+<div class="root " style="--accent: #E39A7B">
+
+<header class="nav">
+<div class="wrap" style="display: flex; align-items: center; justify-content: space-between; height: 72px">
+<a href="#top" style="display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 17px; letter-spacing: -0.02em">
+<span style="width: 10px; height: 10px; border-radius: 50%; background: var(--accent)"></span>Joan Cruzat</a>
+<nav class="nav-links" style="display: flex; gap: 36px" aria-label="Main">
+<a href="#work">Work</a>
+<a href="#approach">Approach</a>
+<a href="#experience">Experience</a>
+<a href="#contact">Contact</a>
+</nav>
+<a class="btn btn-primary" href="mailto:joanmcruzat@gmail.com" style="min-height: 44px; padding: 0 18px; font-size: 14px">Get in touch <span class="arr">→</span></a>
+</div>
+</header>
+
+<main id="top">
+<section class="wrap">
+<div class="hero-grid">
+<div>
+<div class="pill fade-in"><span class="dot"></span>Open to selected remote roles</div>
+<h1 class="h1" style="margin-top: 32px">
+<span class="line"><span>Software that</span></span>
+<span class="line"><span>works is the</span></span>
+<span class="line"><span class="serif" style="font-size: 1.12em">minimum.</span></span>
+</h1>
+<p class="fade-in d1" style="margin: 32px 0 0; font-size: 21px; line-height: 1.5; color: #D6D6DA; max-width: 540px">I build software that’s secure, understandable, and ready for the next change.</p>
+<p class="fade-in d2" style="margin: 16px 0 0; font-size: 16px; line-height: 1.7; color: var(--muted); max-width: 520px">I’m Joan, a senior full-stack engineer with 9+ years in .NET and Angular. I build fintech integrations, payment flows, and the dashboards teams run them from.</p>
+<div class="fade-in d3" style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 40px">
+<a class="btn btn-primary" href="mailto:joanmcruzat@gmail.com">Get in touch <span class="arr">→</span></a>
+<a class="btn btn-ghost" href="#work">See selected work</a>
+</div>
+<div class="fade-in d4" style="display: flex; gap: 28px; margin-top: 36px">
+<a class="link-u" href="https://github.com/joanmcruzat">GitHub ↗</a>
+<a class="link-u" href="https://linkedin.com/in/joan-cruzat">LinkedIn ↗</a>
+<a class="link-u" href="https://joanmcruzat.vercel.app/assets/resume.pdf">Résumé ↓</a>
+</div>
+</div>
+
+<div class="stage" aria-label="Portrait of Joan Cruzat">
+<div class="arch"></div>
+<div class="ring" aria-hidden="true"></div>
+<div class="float">
+<img class="portrait" src="joan-portrait.webp" alt="Joan Cruzat, smiling, in a black blazer">
+</div>
+<div class="chip chip-a"><b>9+</b><span style="color: var(--muted); line-height: 1.3">years in<br>production</span></div>
+<div class="chip chip-b"><span class="mono" style="color: var(--accent)">&lt;/&gt;</span><span>.NET · Angular</span></div>
+<div class="chip chip-c"><b>10k+</b><span style="color: var(--muted); line-height: 1.3">transactions<br>processed</span></div>
+</div>
+</div>
+</section>
+
+<div class="marquee" aria-hidden="true">
+<div class="track">
+<span>Fintech integrations</span><i>✦</i><span>Payment gateways</span><i>✦</i><span>KYC · MFA · SSO</span><i>✦</i><span>REST APIs</span><i>✦</i><span>Operator dashboards</span><i>✦</i><span>SQL performance</span><i>✦</i><span>AWS</span><i>✦</i>
+<span>Fintech integrations</span><i>✦</i><span>Payment gateways</span><i>✦</i><span>KYC · MFA · SSO</span><i>✦</i><span>REST APIs</span><i>✦</i><span>Operator dashboards</span><i>✦</i><span>SQL performance</span><i>✦</i><span>AWS</span><i>✦</i>
+</div>
+</div>
+
+<section id="work" class="section">
+<div class="wrap">
+<div class="reveal">
+<div class="eyebrow mono">01 — Selected work</div>
+<h2 class="h2">Systems that move <span class="serif">money</span> and data.</h2>
+</div>
+<div style="margin-top: 72px">
+
+<article class="row reveal">
+<span class="num mono">01</span>
+<div><div class="cat mono">Fintech · Remittance</div><h3 class="title">Uniteller Remittance Integration</h3></div>
+<div><p>End-to-end onboarding and transfer flow for a third-party remittance provider: signup, KYC, MFA and Plaid bank linking, backed by .NET services.</p>
+<div class="tags"><span class="tag">.NET</span><span class="tag">REST APIs</span><span class="tag">Plaid</span><span class="tag">KYC</span><span class="tag">MFA</span></div></div>
+<div class="result"><b>10k+</b><span>transactions processed</span></div>
+</article>
+
+<article class="row reveal">
+<span class="num mono">02</span>
+<div><div class="cat mono">Operator platform</div><h3 class="title">Moolah Play / MarkerTrax</h3></div>
+<div><p>An Angular operator dashboard for reporting, charts, user management and settings, connected to REST APIs.</p>
+<div class="tags"><span class="tag">Angular</span><span class="tag">TypeScript</span><span class="tag">REST APIs</span><span class="tag">Data viz</span></div></div>
+<div class="result"><b>1k+</b><span>active users</span></div>
+</article>
+
+<article class="row reveal">
+<span class="num mono">03</span>
+<div><div class="cat mono">Payments</div><h3 class="title">NMI Payment Gateway</h3></div>
+<div><p>Card payments end to end: tokenized card storage, transaction processing, and a database design built for traceability.</p>
+<div class="tags"><span class="tag">.NET</span><span class="tag">Payment APIs</span><span class="tag">SQL</span><span class="tag">Security</span></div></div>
+<div class="result"><div class="soft">Card vault, charges<br>and refunds</div></div>
+</article>
+
+<article class="row reveal">
+<span class="num mono">04</span>
+<div><div class="cat mono">Financial services</div><h3 class="title">Usio GPR / Akimbo</h3></div>
+<div><p>Prepaid card integration with single sign-on and token handling, coordinating the Angular frontend and .NET backend.</p>
+<div class="tags"><span class="tag">.NET</span><span class="tag">Angular</span><span class="tag">SSO</span><span class="tag">API integration</span></div></div>
+<div class="result"><div class="soft">SSO and token<br>lifecycle</div></div>
+</article>
+
+<article class="row reveal">
+<span class="num mono">05</span>
+<div><div class="cat mono">API security</div><h3 class="title">Bloxcross Crypto Integration</h3></div>
+<div><p>A .NET 8 service integration secured with HMAC request signing and JWT, plus structured logging, validation and clear error handling.</p>
+<div class="tags"><span class="tag">.NET 8</span><span class="tag">HMAC</span><span class="tag">JWT</span><span class="tag">Microservices</span></div></div>
+<div class="result"><div class="soft">Signed, logged,<br>validated requests</div></div>
+</article>
+
+<article class="row reveal">
+<span class="num mono">06</span>
+<div><div class="cat mono">Education</div><h3 class="title">Academic Information Management</h3></div>
+<div><p>Database-driven systems for student records and academic workflows, built full stack in PHP.</p>
+<div class="tags"><span class="tag">PHP</span><span class="tag">JavaScript</span><span class="tag">SQL</span></div></div>
+<div class="result"><div class="soft">Where it<br>started</div></div>
+</article>
+
+</div>
+</div>
+</section>
+
+<section id="approach" class="section" style="padding-top: 40px">
+<div class="wrap">
+<div class="reveal">
+<div class="eyebrow mono">02 — Approach</div>
+<h2 class="h2">I look at a feature as a <span class="serif">whole system</span>, not a ticket.</h2>
+</div>
+<div class="approach-grid">
+<div class="principles">
+<div class="pr reveal"><span class="mono">01</span><h3>Performance</h3><p>Query plans, indexing, caching and payload size. A 200 response is the start, not the goal.</p></div>
+<div class="pr reveal"><span class="mono">02</span><h3>Maintainability</h3><p>Clear abstractions and code another engineer can follow six months later.</p></div>
+<div class="pr reveal"><span class="mono">03</span><h3>Security</h3><p>Authentication, validation, careful handling of sensitive data, and logs that actually help.</p></div>
+<div class="pr reveal"><span class="mono">04</span><h3>Reliability</h3><p>Failure scenarios, retries where they make sense, and observability from day one.</p></div>
+<div class="pr reveal"><span class="mono">05</span><h3>Scalability</h3><p>Planning for data growth, traffic, async work and sensible service boundaries.</p></div>
+<div class="pr reveal"><span class="mono">06</span><h3>Developer experience</h3><p>Docs, tests and CI/CD that let a team ship with confidence.</p></div>
+</div>
+
+<div class="diagram reveal" aria-label="Typical system architecture: Angular frontend, .NET Web API, business layer, data access, then databases, cache and third-party APIs on AWS">
+<div class="mono" style="font-size: 12px; color: var(--muted); letter-spacing: 0.1em; margin-bottom: 20px">A TYPICAL SYSTEM I BUILD</div>
+<div class="node">Angular frontend<small>UI</small></div>
+<div class="flow"></div>
+<div class="node">.NET Web API<small>REST</small></div>
+<div class="flow"></div>
+<div class="node">Application / business layer<small>DOMAIN</small></div>
+<div class="flow"></div>
+<div class="node">Data access layer<small>EF · SQL</small></div>
+<div class="flow"></div>
+<div class="leaf-grid">
+<div class="leaf">SQL Server<br>MySQL · Postgres</div>
+<div class="leaf">Redis<br>cache</div>
+<div class="leaf">Third-party<br>APIs</div>
+</div>
+<div class="cloud mono">AWS · cloud infrastructure</div>
+<div class="qual mono"><span>SECURE</span><span>SCALABLE</span><span>OBSERVABLE</span><span>TESTABLE</span></div>
+</div>
+</div>
+</div>
+</section>
+
+<section id="experience" class="section" style="padding-top: 40px">
+<div class="wrap">
+<div class="reveal">
+<div class="eyebrow mono">03 — Experience</div>
+</div>
+<div class="exp-grid">
+<div class="reveal">
+<div class="big-num"><span class="count"></span><span class="serif">+</span></div>
+<p style="font-size: 20px; line-height: 1.5; color: #D6D6DA; margin: 24px 0 0; max-width: 340px">years shipping and supporting production systems, from database to UI.</p>
+</div>
+<div>
+<div class="job reveal-x">
+<span class="mono" style="font-size: 13px; color: var(--muted); padding-top: 4px">2022 — Now</span>
+<div><h3>Senior .NET Full Stack Engineer</h3><div class="co">Xentra Solutions</div>
+<p>Enterprise .NET applications, REST APIs, financial integrations and microservices on AWS. Tuned SQL queries and stored procedures, cutting key query times by up to 90%.</p></div>
+</div>
+<div class="job reveal-x">
+<span class="mono" style="font-size: 13px; color: var(--muted); padding-top: 4px">2020 — Now</span>
+<div><h3>Angular Frontend Developer</h3><div class="co">Concurrent role</div>
+<p>Operator dashboards with reporting and charts, reusable components and complex forms, in TypeScript, RxJS, Angular Material and Tailwind CSS.</p></div>
+</div>
+<div class="job reveal-x">
+<span class="mono" style="font-size: 13px; color: var(--muted); padding-top: 4px">2016 — 2020</span>
+<div><h3>PHP Full Stack Developer</h3><div class="co">Academic systems</div>
+<p>Database-driven academic information systems and full-stack web apps in PHP, JavaScript and SQL.</p></div>
+</div>
+</div>
+</div>
+
+<div class="stack">
+<div class="reveal"><h4 class="mono">Backend</h4><p>.NET / .NET 8 · C#<br>REST APIs · Microservices</p></div>
+<div class="reveal"><h4 class="mono">Frontend</h4><p>Angular · TypeScript<br>RxJS · Material · Tailwind</p></div>
+<div class="reveal"><h4 class="mono">Data</h4><p>SQL Server · MySQL<br>PostgreSQL · Redis</p></div>
+<div class="reveal"><h4 class="mono">Cloud &amp; DevOps</h4><p>AWS · Docker · Linux<br>CI/CD · Git</p></div>
+<div class="reveal"><h4 class="mono">Quality</h4><p>Jasmine · Playwright · Cypress<br>API and E2E testing</p></div>
+<div class="reveal"><h4 class="mono">AI-assisted</h4><p>Copilot and ChatGPT, with every<br>output reviewed and tested</p></div>
+</div>
+</div>
+</section>
+
+<section id="contact" class="contact">
+<div class="wrap" style="position: relative">
+<div class="reveal">
+<div class="eyebrow mono" style="justify-content: center">04 — Contact</div>
+<h2 class="h2" style="font-size: clamp(44px, 7vw, 104px); margin-top: 28px">Have a system that<br>needs to <span class="serif">just work?</span></h2>
+<p style="font-size: 18px; color: var(--muted); max-width: 520px; margin: 28px auto 0; line-height: 1.6">I’m open to selected remote roles and contract work: building, modernizing, integrating or scaling.</p>
+<div style="margin-top: 56px"><a class="mail" href="mailto:joanmcruzat@gmail.com">joanmcruzat@gmail.com <span class="arr" style="color: var(--accent)">↗</span></a></div>
+<div style="display: flex; justify-content: center; gap: 28px; margin-top: 36px">
+<a class="link-u" href="https://github.com/joanmcruzat">GitHub ↗</a>
+<a class="link-u" href="https://linkedin.com/in/joan-cruzat">LinkedIn ↗</a>
+<a class="link-u" href="https://joanmcruzat.vercel.app/assets/resume.pdf">Résumé ↓</a>
+</div>
+</div>
+<div class="foot">
+<span>© 2026 Joan Cruzat</span>
+<span class="mono">Built with Angular</span>
+<a class="link-u" href="#top">Back to top ↑</a>
+</div>
+</div>
+</section>
+</main>
+</div>
+
+</body>
+</html>

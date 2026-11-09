@@ -1,7 +1,7 @@
 <div class="modal-backdrop" (click)="close()">
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="hire-title" (click)="$event.stopPropagation()">
     <button class="close" (click)="close()" aria-label="Close">×</button>
-    <div class="section-label">HIRE ME</div>
+    <p class="eyebrow">Get in touch</p>
     <h2 id="hire-title">Start a conversation.</h2>
     <p class="modal-sub">Tell me about the role, company and problem you're looking to solve.</p>
 
@@ -29,8 +29,8 @@
           <div class="error">{{ error() }}</div>
         }
 
-        <button type="submit" class="primary full" [disabled]="sending()">
-          {{ sending() ? 'Sending…' : 'Send Hiring Inquiry →' }}
+        <button type="submit" class="btn btn-primary full" [disabled]="sending()">
+          {{ sending() ? 'Sending…' : 'Send inquiry →' }}
         </button>
       </form>
     }

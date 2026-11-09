@@ -1,35 +1,36 @@
-@if (store.content(); as content) {
-  <div class="app">
-    <app-site-nav [fullName]="content.profile.fullName" (hire)="hireOpen.set(true)" />
+<app-nav [fullName]="profile()?.fullName ?? ''" (getInTouch)="hireOpen.set(true)" />
 
-    <main id="home">
-      <app-hero-section [profile]="content.profile" (hire)="hireOpen.set(true)" />
-      <app-ticker-strip [items]="content.profile.ticker" />
-      <app-about-section [profile]="content.profile" />
-      <app-experience-section [experience]="content.experience" />
-      <app-projects-section [projects]="content.projects" />
-      <app-engineering-section [principles]="content.principles" />
-      <app-architecture-section />
-      <app-toolbox-section [tools]="content.tools" [qualityAreas]="content.qualityAreas" />
-      <app-contact-section [profile]="content.profile" (hire)="hireOpen.set(true)" />
-    </main>
+<main id="top">
+  @if (content(); as content) {
+    <app-hero [profile]="content.profile" (getInTouch)="hireOpen.set(true)" />
+    <app-marquee [items]="content.profile.marquee" />
+    <app-work [copy]="content.sections.work" [projects]="content.projects" />
+    <app-approach [copy]="content.sections.approach" [principles]="content.principles" />
+    <app-experience
+      [copy]="content.sections.experience"
+      [years]="content.profile.yearsExperience"
+      [jobs]="content.experience"
+      [stack]="content.stack"
+    />
+    <app-contact [copy]="content.sections.contact" [profile]="content.profile" />
+  } @else {
+    <app-content-status class="wrap" [hasError]="hasError()" (retry)="reload()" />
+  }
+</main>
 
-    <app-site-footer [profile]="content.profile" />
+@if (profile(); as profile) {
+  <app-footer [fullName]="profile.fullName" />
 
-    @if (hireOpen()) {
-      <app-hire-modal [email]="content.profile.email" (closed)="hireOpen.set(false)" />
+  <!-- Loaded on demand so the form code stays out of the initial bundle. -->
+  @if (hireOpen()) {
+    @defer {
+      <app-hire-modal [email]="profile.email" (closed)="hireOpen.set(false)" />
     }
+  }
 
-    <app-chat-widget [fullName]="content.profile.fullName" [linkedinUrl]="content.profile.linkedinUrl" />
-  </div>
-} @else if (store.hasError()) {
-  <div class="app-state" role="alert">
-    <p>The portfolio couldn't load right now.</p>
-    <button class="primary" (click)="store.reload()">Try again</button>
-  </div>
-} @else {
-  <div class="app-state" aria-busy="true">
-    <span class="pulse"></span>
-    <p>Loading…</p>
-  </div>
+  @defer (on idle) {
+    <app-chat-widget [fullName]="profile.fullName" [linkedinUrl]="profile.linkedinUrl" />
+  }
 }
+
+<app-cursor />

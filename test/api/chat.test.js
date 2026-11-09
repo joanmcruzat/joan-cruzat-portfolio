@@ -9,9 +9,12 @@ const content = {
     fullName: "Ada Lovelace", headline: "Engineer", yearsExperience: "8+", summary: "Builds APIs.",
     availability: "Available for remote work", email: "ada@example.com", linkedinUrl: "https://www.linkedin.com/in/ada"
   },
-  experience: [{ period: "2022 — 2026", role: "Engineer", company: "Acme", description: "Built APIs.", tech: [] }],
-  projects: [{ title: "Payments", description: "Gateway.", tech: [".NET", "SQL"] }],
-  skills: [".NET", "Angular"],
+  experience: [{ period: "2022 — 2026", role: "Engineer", company: "Acme", description: "Built APIs." }],
+  projects: [
+    { title: "Payments", description: "Gateway.", tags: [".NET", "SQL"], result: { kind: "metric", value: "10k+", label: "charges" } },
+    { title: "Portal", description: "Dashboard.", tags: ["Angular"], result: { kind: "note", text: "Internal" } }
+  ],
+  stack: [{ title: "Backend", lines: [".NET · C#", "REST APIs"] }],
   principles: [{ title: "Performance" }, { title: "Security" }]
 };
 
@@ -21,8 +24,9 @@ describe("buildSystemPrompt", () => {
 
     assert.match(prompt, /portfolio website/);
     assert.match(prompt, /2022–2026: Engineer at Acme\. Built APIs\./);
-    assert.match(prompt, /Payments: Gateway\. \(\.NET, SQL\)/);
-    assert.match(prompt, /Skills: \.NET, Angular\./);
+    assert.match(prompt, /Payments: Gateway\. \(\.NET, SQL\), 10k\+ charges/);
+    assert.match(prompt, /Portal: Dashboard\. \(Angular\)\n/);
+    assert.match(prompt, /Backend: \.NET · C# REST APIs/);
     assert.match(prompt, /Engineering values: performance, security\./);
     assert.match(prompt, /LinkedIn linkedin\.com\/in\/ada/);
   });

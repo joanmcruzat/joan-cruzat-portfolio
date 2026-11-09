@@ -1,83 +1,121 @@
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideZonelessChangeDetection } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
-import { Meta, Title } from '@angular/platform-browser';
-import { buildContent, buildProfile } from '../testing/portfolio-content.fixture';
+import { ComponentFixture, DeferBlockState, TestBed } from '@angular/core/testing';
+import { CONTENT_FIXTURE } from '../testing/portfolio-content.fixture';
 import { App } from './app';
-import { CONTENT_URL } from './core/content/portfolio-content.store';
+import { CONTENT_URL } from './content/portfolio-content.store';
+import { NAV_ITEMS } from './layout/nav';
 
 describe('App', () => {
+  let fixture: ComponentFixture<App>;
+  let el: HTMLElement;
   let http: HttpTestingController;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     TestBed.configureTestingModule({
+      imports: [App],
       providers: [provideZonelessChangeDetection(), provideHttpClient(), provideHttpClientTesting()]
     });
+    await TestBed.compileComponents(); // resolves the @defer dependencies
     http = TestBed.inject(HttpTestingController);
+    fixture = TestBed.createComponent(App);
+    // Not whenStable(): the pending /api/content request keeps the app unstable until a test answers it.
+    TestBed.tick();
+    el = fixture.nativeElement;
   });
 
   afterEach(() => http.verify());
 
-  // whenStable() would wait for the pending content request, so render with tick() first.
-  function render() {
-    const fixture = TestBed.createComponent(App);
-    TestBed.tick();
-    return fixture;
+  async function respond(body: object | null, status = 200): Promise<void> {
+    const request = http.expectOne(CONTENT_URL);
+    if (status === 200) request.flush(body);
+    else request.flush(null, { status, statusText: 'Service Unavailable' });
+    await fixture.whenStable();
   }
 
-  it('shows a loading state until the content arrives', async () => {
-    const fixture = render();
-
-    expect(fixture.nativeElement.textContent).toContain('Loading…');
-    http.expectOne(CONTENT_URL);
+  describe('while content loads', () => {
+    it('shows a polite loading status instead of the sections', () => {
+      expect(el.querySelector('[role="status"]')?.textContent).toContain('Loading portfolio');
+      expect(el.querySelector('section#work')).toBeNull();
+      http.expectOne(CONTENT_URL);
+    });
   });
 
-  it('renders the sections from the loaded content', async () => {
-    const fixture = render();
+  describe('when the API fails', () => {
+    it('shows an alert and retries on request', async () => {
+      await respond(null, 503);
 
-    http.expectOne(CONTENT_URL).flush(buildContent({ profile: buildProfile({ heroHighlight: 'ship reliable systems.' }) }));
-    await fixture.whenStable();
+      expect(el.querySelector('[role="alert"]')?.textContent).toContain('Content unavailable');
 
-    const text: string = fixture.nativeElement.textContent;
-    expect(text).toContain('ship reliable systems.');
-    expect(text).toContain('Payment gateway.');
-    expect(text).toContain('Fast queries.');
+      (el.querySelector('[role="alert"] button') as HTMLButtonElement).click();
+      TestBed.tick();
+      await respond(CONTENT_FIXTURE);
+
+      expect(el.querySelector('section#work')).not.toBeNull();
+    });
   });
 
-  it('applies the profile metadata to the document', async () => {
-    const fixture = render();
+  describe('with content', () => {
+    beforeEach(() => respond(CONTENT_FIXTURE));
 
-    http.expectOne(CONTENT_URL).flush(buildContent());
-    await fixture.whenStable();
+    it('has a single h1 with the hero headline from the API', () => {
+      const headings = el.querySelectorAll('h1');
 
-    expect(TestBed.inject(Title).getTitle()).toBe('Ada Lovelace | Engineer');
-    expect(TestBed.inject(Meta).getTag('name="description"')?.content).toBe('Ada builds systems.');
-  });
+      expect(headings).toHaveLength(1);
+      expect(headings[0]?.textContent).toContain('Software that');
+      expect(headings[0]?.textContent).toContain('minimum.');
+    });
 
-  it('shows an error with a retry button when the content fails to load', async () => {
-    const fixture = render();
+    it('renders every section the nav links to', () => {
+      for (const item of NAV_ITEMS) {
+        expect(el.querySelector(`section#${item.id}`), item.id).not.toBeNull();
+      }
+    });
 
-    http.expectOne(CONTENT_URL).flush(null, { status: 503, statusText: 'Service Unavailable' });
-    await fixture.whenStable();
-    expect(fixture.nativeElement.textContent).toContain("The portfolio couldn't load right now.");
+    it('renders projects, principles, experience and stack from the API', () => {
+      const text = el.textContent ?? '';
+      const { projects, principles, experience, stack } = CONTENT_FIXTURE;
 
-    fixture.nativeElement.querySelector('.app-state button').click();
-    TestBed.tick();
-    http.expectOne(CONTENT_URL).flush(buildContent());
-    await fixture.whenStable();
+      for (const project of projects) expect(text).toContain(project.title);
+      for (const principle of principles) expect(text).toContain(principle.title);
+      for (const job of experience) expect(text).toContain(job.role);
+      for (const group of stack) expect(text).toContain(group.title);
+    });
 
-    expect(fixture.nativeElement.textContent).toContain('Payment gateway.');
-  });
+    it('shows the name in the nav and footer', () => {
+      expect(el.querySelector('app-nav .brand')?.textContent).toContain('Ada Lovelace');
+      expect(el.querySelector('app-footer')?.textContent).toContain('Ada Lovelace');
+    });
 
-  it('opens the Hire Me dialog from the navigation', async () => {
-    const fixture = render();
-    http.expectOne(CONTENT_URL).flush(buildContent());
-    await fixture.whenStable();
+    it('links the contact email with mailto', () => {
+      expect(el.querySelector('#contact a.mail')?.getAttribute('href')).toBe('mailto:ada@example.com');
+    });
 
-    fixture.nativeElement.querySelector('.hire-btn').click();
-    await fixture.whenStable();
+    it('opens the GitHub, LinkedIn and résumé links in a new tab without opener access', () => {
+      const { githubUrl, linkedinUrl, resumeUrl } = CONTENT_FIXTURE.profile;
 
-    expect(fixture.nativeElement.querySelector('[role="dialog"][aria-modal="true"]')).not.toBeNull();
+      for (const section of ['app-hero', 'app-contact']) {
+        const links = Array.from(el.querySelectorAll<HTMLAnchorElement>(`${section} .link-row a`));
+
+        expect(links.map((a) => a.getAttribute('href')), section).toEqual([githubUrl, linkedinUrl, resumeUrl]);
+        for (const link of links) {
+          expect(link.getAttribute('target'), link.href).toBe('_blank');
+          expect(link.getAttribute('rel'), link.href).toBe('noopener noreferrer');
+        }
+      }
+    });
+
+    it('hides the decorative marquee from assistive technology', () => {
+      expect(el.querySelector('app-marquee')?.getAttribute('aria-hidden')).toBe('true');
+    });
+
+    it('opens the contact dialog from the nav button', async () => {
+      (el.querySelector('app-nav .cta') as HTMLButtonElement).click();
+      await fixture.whenStable();
+      for (const block of await fixture.getDeferBlocks()) await block.render(DeferBlockState.Complete);
+
+      expect(el.querySelector('[role="dialog"][aria-modal="true"]')).not.toBeNull();
+    });
   });
 });

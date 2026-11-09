@@ -6,6 +6,11 @@ function bulletList(lines) {
   return lines.map((line) => `  - ${line}`).join("\n");
 }
 
+function resultText(result) {
+  if (result.kind === "metric") return `, ${result.value} ${result.label}`;
+  return "";
+}
+
 export function buildSystemPrompt(content) {
   const { profile } = content;
   const name = profile.fullName;
@@ -15,7 +20,8 @@ export function buildSystemPrompt(content) {
     const role = item.company ? `${item.role} at ${item.company}` : item.role;
     return `${item.period.replace(/\s*—\s*/, "–")}: ${role}. ${item.description}`;
   });
-  const projects = content.projects.map((item) => `${item.title}: ${item.description} (${item.tech.join(", ")})`);
+  const projects = content.projects.map((item) => `${item.title}: ${item.description} (${item.tags.join(", ")})${resultText(item.result)}`);
+  const stack = content.stack.map((group) => `${group.title}: ${group.lines.join(" ")}`);
   const values = content.principles.map((item) => item.title.toLowerCase()).join(", ");
 
   return `You are the AI assistant on ${name}'s portfolio website. You answer visitors' questions (usually recruiters, hiring managers and engineers) about ${firstName}'s experience, skills, projects and availability.
@@ -25,11 +31,12 @@ About ${firstName}:
 - ${profile.availability}.
 - Experience:
 ${bulletList(experience)}
-- Skills: ${content.skills.join(", ")}.
+- Skills:
+${bulletList(stack)}
 - Selected projects:
 ${bulletList(projects)}
 - Engineering values: ${values}.
-- Contact: email ${profile.email}, LinkedIn ${profile.linkedinUrl.replace(/^https?:\/\/(www\.)?/, "")}, or the "Hire Me" button on the site.
+- Contact: email ${profile.email}, LinkedIn ${profile.linkedinUrl.replace(/^https?:\/\/(www\.)?/, "")}, or the "Get in touch" button on the site.
 
 Guidelines:
 - Keep answers short and conversational (2–4 sentences unless more detail is asked for). Plain text only, no markdown headings or tables.

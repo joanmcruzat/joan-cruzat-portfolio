@@ -1,0 +1,191 @@
+@use 'styles/tokens';
+@use 'styles/typography';
+@use 'styles/motion';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: var(--nav-height);
+  background: var(--bg);
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+a {
+  color: var(--text);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--accent);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+.wrap {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+.section {
+  padding: 140px 0;
+}
+
+@media (max-width: 960px) {
+  .section {
+    padding: 96px 0;
+  }
+}
+
+// Pill buttons, shared by nav, hero and dialogs.
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 46px;
+  padding: 0 22px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform 0.35s var(--ease), background-color 0.3s, color 0.3s, border-color 0.3s;
+
+  .arr {
+    display: inline-block;
+    transition: transform 0.35s var(--ease);
+  }
+
+  &:hover .arr {
+    transform: translateX(4px);
+  }
+
+  &:disabled {
+    opacity: 0.55;
+    cursor: wait;
+    transform: none;
+  }
+}
+
+.btn-primary {
+  background: var(--text);
+  color: var(--bg);
+
+  &:hover:not(:disabled) {
+    background: var(--accent);
+    color: var(--bg);
+    transform: translateY(-2px);
+  }
+}
+
+.btn-ghost {
+  background: transparent;
+  border-color: var(--line-strong);
+  color: var(--text);
+
+  &:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: translateY(-2px);
+  }
+}
+
+// Text link whose underline grows from the left on hover.
+.link-u {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--muted);
+  font-size: 14px;
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 10px;
+    height: 1px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s var(--ease);
+  }
+
+  &:hover {
+    color: var(--text);
+  }
+
+  &:hover::after {
+    transform: scaleX(1);
+  }
+}
+
+.link-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 28px;
+}
+
+.tag {
+  font-size: 12px;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  padding: 5px 11px;
+}
+
+// Keeps line breaks stored in content (e.g. a two-line heading).
+.pre-line {
+  white-space: pre-line;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+// The custom cursor (app-cursor) adds this class on fine pointers only; text fields keep the I-beam.
+.has-custom-cursor,
+.has-custom-cursor * {
+  cursor: none !important;
+}
+
+.has-custom-cursor :is(input, textarea, [contenteditable='true']) {
+  cursor: text !important;
+}
