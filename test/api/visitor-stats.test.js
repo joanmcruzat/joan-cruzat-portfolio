@@ -15,7 +15,7 @@ function fakeFetch(body, { status = 200 } = {}) {
 }
 
 describe("fetchVisitorCount", () => {
-  it("asks Vercel for the last 30 days with a bearer token and returns the visitor count", async () => {
+  it("asks Vercel for the 30 days up to the end of today with a bearer token", async () => {
     const { fetchImpl, calls } = fakeFetch({ data: { visitors: 42, pageviews: 90 } });
 
     assert.equal(await fetchVisitorCount({ ...config, fetchImpl }), 42);
@@ -24,8 +24,9 @@ describe("fetchVisitorCount", () => {
     assert.equal(url.pathname, "/v1/query/web-analytics/visits/count");
     assert.equal(url.searchParams.get("projectId"), "prj_1");
     assert.equal(url.searchParams.get("teamId"), "team_1");
-    assert.equal(url.searchParams.get("since"), "2026-10-10T12:00:00.000Z");
-    assert.equal(url.searchParams.get("until"), "2026-11-09T12:00:00.000Z");
+    // Vercel rounds both ends down to whole days, so the range must end at the next midnight to include today.
+    assert.equal(url.searchParams.get("since"), "2026-10-11T00:00:00.000Z");
+    assert.equal(url.searchParams.get("until"), "2026-11-10T00:00:00.000Z");
     assert.equal(init.headers.Authorization, "Bearer tok_test");
   });
 
