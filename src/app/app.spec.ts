@@ -156,7 +156,6 @@ describe('App', () => {
       const pill = el.querySelector('app-hero .visitors')!;
       expect(pill.querySelector('.label')?.textContent).toBe('Site visitors');
       expect(pill.querySelector('.count')?.textContent).toContain('1234');
-      expect(pill.querySelector('.period')?.textContent).toBe('last 30 days');
       expect(pill.querySelector('.live-tag')?.textContent).toContain('Live');
     });
 

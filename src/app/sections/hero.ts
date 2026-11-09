@@ -21,7 +21,6 @@ import { PortraitStage } from '../ui/portrait-stage';
                 <span class="live-tag"><span class="dot live" aria-hidden="true"></span>Live</span>
                 <span class="label">Site visitors</span>
                 <app-count-up class="count" [to]="stats.visitors" />
-                <span class="period">last {{ stats.days }} days</span>
               </p>
             }
           </div>
