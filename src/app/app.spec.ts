@@ -147,20 +147,23 @@ describe('App', () => {
       expect(sendEvent).toHaveBeenCalledWith('profile_link_clicked', { link: 'github', location: 'contact' });
     });
 
-    it('shows the visitor count in the footer once /api/visitors answers', async () => {
-      expect(el.querySelector('app-footer .visitors')).toBeNull();
+    it('shows the live visitor count at the top of the hero once /api/visitors answers', async () => {
+      expect(el.querySelector('app-hero .visitors')).toBeNull();
 
       http.expectOne(VISITORS_URL).flush({ visitors: 1234, days: 30 });
       await settle();
 
-      expect(el.querySelector('app-footer .visitors')?.textContent).toContain('1,234 visitors, last 30 days');
+      const pill = el.querySelector('app-hero .visitors')!;
+      expect(pill.querySelector('.label')?.textContent).toBe('Site visitors');
+      expect(pill.querySelector('.count')?.textContent).toContain('1234');
+      expect(pill.querySelector('.live-tag')?.textContent).toContain('Live');
     });
 
     it('leaves the visitor count out when /api/visitors fails', async () => {
       http.expectOne(VISITORS_URL).flush(null, { status: 503, statusText: 'Unavailable' });
       await settle();
 
-      expect(el.querySelector('app-footer .visitors')).toBeNull();
+      expect(el.querySelector('app-hero .visitors')).toBeNull();
     });
   });
 });

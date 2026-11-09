@@ -24,10 +24,12 @@ export async function fetchVisitorCount({
     throw new VisitorStatsUnavailableError("VERCEL_ANALYTICS_TOKEN or VERCEL_ANALYTICS_PROJECT_ID is not set.");
   }
 
+  // Vercel rounds both ends down to whole UTC days, so end at the next midnight to include today.
+  const until = (Math.floor(now / DAY_MS) + 1) * DAY_MS;
   const query = new URLSearchParams({
     projectId,
-    since: new Date(now - WINDOW_DAYS * DAY_MS).toISOString(),
-    until: new Date(now).toISOString()
+    since: new Date(until - WINDOW_DAYS * DAY_MS).toISOString(),
+    until: new Date(until).toISOString()
   });
   if (teamId) query.set("teamId", teamId);
 
