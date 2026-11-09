@@ -11,6 +11,7 @@ Browser (Angular 21, zoneless, signals, prerendered + hydrated)
   GET  /api/content  -> api/content.js  -> Supabase content (CDN-cached 5 min)
   POST /api/chat     -> api/chat.js     -> Supabase content -> system prompt -> Claude
   POST /api/contact  -> api/contact.js  -> Resend -> Joan's inbox
+  page views         -> Vercel Web Analytics (src/main.ts; enable it in the Vercel project's Analytics tab)
 ```
 
 | Path | Responsibility |

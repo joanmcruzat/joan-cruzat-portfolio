@@ -52,6 +52,7 @@ const inquiry = read("api/_lib/inquiry.js");
 const repository = read("api/_lib/content-repository.js");
 const migrations = ["001_portfolio_content.sql", "002_redesign_content.sql"].map((file) => read(`db/migrations/${file}`));
 const store = read("src/app/content/portfolio-content.store.ts");
+const browserEntry = read("src/main.ts");
 const tokens = read("src/styles/_tokens.scss");
 const motion = read("src/styles/_motion.scss");
 const angular = JSON.parse(read("angular.json"));
@@ -72,6 +73,7 @@ const checks = [
   ["Content read with publishable key only", repository.includes("SUPABASE_PUBLISHABLE_KEY") && !/SECRET|SERVICE_ROLE|POSTGRES_URL/.test(repository)],
   ["Content tables use row-level security", migrations.every((sql) => sql.includes("enable row level security") && sql.includes("revoke insert, update, delete"))],
   ["Page loads content from the API", store.includes("'/api/content'")],
+  ["Vercel Analytics enabled in the browser only", browserEntry.includes("injectAnalytics(") && !read("src/main.server.ts").includes("@vercel/analytics")],
   ["No server secrets in frontend", !/RESEND_API_KEY|ANTHROPIC_API_KEY|SUPABASE_SECRET_KEY|SERVICE_ROLE|POSTGRES_URL/.test(frontend)],
   ["No console.log in frontend", !frontend.includes("console.log(")]
 ];
