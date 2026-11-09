@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, DestroyRef, inject, input, output, 
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { finalize } from 'rxjs';
+import { Analytics } from '../../core/analytics/analytics';
 import { problemDetail } from '../../core/http/problem-details';
 import { ContactApi } from './contact-api';
 
@@ -20,6 +21,7 @@ export class HireModal {
   readonly closed = output();
 
   private readonly contactApi = inject(ContactApi);
+  private readonly analytics = inject(Analytics);
   private readonly destroyRef = inject(DestroyRef);
 
   protected readonly form = inject(NonNullableFormBuilder).group({
@@ -67,6 +69,7 @@ export class HireModal {
       next: () => {
         this.sent.set(true);
         this.form.reset();
+        this.analytics.track('inquiry_sent');
       },
       error: (error: unknown) => this.error.set(problemDetail(error, SEND_FAILED))
     });

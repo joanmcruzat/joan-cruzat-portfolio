@@ -1,11 +1,12 @@
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { Profile, profileLinks } from '../content/portfolio-content.model';
+import { TrackDirective } from '../core/analytics/track.directive';
 import { PortraitStage } from '../ui/portrait-stage';
 
 @Component({
   selector: 'app-hero',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [PortraitStage],
+  imports: [PortraitStage, TrackDirective],
   template: `
     <section class="wrap" aria-labelledby="hero-title">
       <div class="hero-grid">
@@ -27,7 +28,8 @@ import { PortraitStage } from '../ui/portrait-stage';
           </div>
           <div class="link-row fade-in d4">
             @for (link of links(); track link.href) {
-              <a class="link-u" [href]="link.href" target="_blank" rel="noopener noreferrer">{{ link.label }}</a>
+              <a class="link-u" [href]="link.href" target="_blank" rel="noopener noreferrer"
+                appTrack="profile_link_clicked" [trackProps]="{ link: link.id, location: 'hero' }">{{ link.label }}</a>
             }
           </div>
         </div>

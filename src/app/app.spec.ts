@@ -2,20 +2,28 @@ import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, DeferBlockState, TestBed } from '@angular/core/testing';
+import { vi } from 'vitest';
 import { CONTENT_FIXTURE } from '../testing/portfolio-content.fixture';
 import { App } from './app';
 import { CONTENT_URL } from './content/portfolio-content.store';
+import { SEND_EVENT } from './core/analytics/analytics';
+import { VISITORS_URL } from './core/analytics/visitor-stats.store';
 import { NAV_ITEMS } from './layout/nav';
 
 describe('App', () => {
   let fixture: ComponentFixture<App>;
   let el: HTMLElement;
   let http: HttpTestingController;
+  let sendEvent: ReturnType<typeof vi.fn>;
 
   beforeEach(async () => {
+    sendEvent = vi.fn();
     TestBed.configureTestingModule({
       imports: [App],
-      providers: [provideZonelessChangeDetection(), provideHttpClient(), provideHttpClientTesting()]
+      providers: [
+        provideZonelessChangeDetection(), provideHttpClient(), provideHttpClientTesting(),
+        { provide: SEND_EVENT, useValue: sendEvent }
+      ]
     });
     await TestBed.compileComponents(); // resolves the @defer dependencies
     http = TestBed.inject(HttpTestingController);
@@ -25,13 +33,24 @@ describe('App', () => {
     el = fixture.nativeElement;
   });
 
-  afterEach(() => http.verify());
+  afterEach(() => {
+    // The visitor count loads independently; answer it if a test left it pending.
+    for (const request of http.match(VISITORS_URL)) request.flush(null, { status: 503, statusText: 'Unavailable' });
+    http.verify();
+  });
+
+  /** Renders pending changes without whenStable(), which would wait on unanswered requests. */
+  async function settle(): Promise<void> {
+    TestBed.tick();
+    await new Promise((resolve) => setTimeout(resolve));
+    TestBed.tick();
+  }
 
   async function respond(body: object | null, status = 200): Promise<void> {
     const request = http.expectOne(CONTENT_URL);
     if (status === 200) request.flush(body);
     else request.flush(null, { status, statusText: 'Service Unavailable' });
-    await fixture.whenStable();
+    await settle();
   }
 
   describe('while content loads', () => {
@@ -110,12 +129,38 @@ describe('App', () => {
       expect(el.querySelector('app-marquee')?.getAttribute('aria-hidden')).toBe('true');
     });
 
-    it('opens the contact dialog from the nav button', async () => {
+    it('opens the contact dialog from the nav button and records where it came from', async () => {
       (el.querySelector('app-nav .cta') as HTMLButtonElement).click();
-      await fixture.whenStable();
+      await settle();
       for (const block of await fixture.getDeferBlocks()) await block.render(DeferBlockState.Complete);
 
       expect(el.querySelector('[role="dialog"][aria-modal="true"]')).not.toBeNull();
+      expect(sendEvent).toHaveBeenCalledWith('get_in_touch_opened', { source: 'nav' });
+    });
+
+    it('records profile link clicks with the link and its location', () => {
+      const github = el.querySelector<HTMLAnchorElement>('#contact .link-row a')!;
+      github.addEventListener('click', (event) => event.preventDefault());
+
+      github.click();
+
+      expect(sendEvent).toHaveBeenCalledWith('profile_link_clicked', { link: 'github', location: 'contact' });
+    });
+
+    it('shows the visitor count in the footer once /api/visitors answers', async () => {
+      expect(el.querySelector('app-footer .visitors')).toBeNull();
+
+      http.expectOne(VISITORS_URL).flush({ visitors: 1234, days: 30 });
+      await settle();
+
+      expect(el.querySelector('app-footer .visitors')?.textContent).toContain('1,234 visitors, last 30 days');
+    });
+
+    it('leaves the visitor count out when /api/visitors fails', async () => {
+      http.expectOne(VISITORS_URL).flush(null, { status: 503, statusText: 'Unavailable' });
+      await settle();
+
+      expect(el.querySelector('app-footer .visitors')).toBeNull();
     });
   });
 });

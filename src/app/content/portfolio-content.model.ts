@@ -89,6 +89,8 @@ export interface PortfolioContent {
 }
 
 export interface ExternalLink {
+  /** Stable name for analytics. */
+  readonly id: 'github' | 'linkedin' | 'resume';
   readonly label: string;
   readonly href: string;
 }
@@ -96,8 +98,8 @@ export interface ExternalLink {
 /** The GitHub / LinkedIn / résumé links shown in the hero and contact sections. */
 export function profileLinks(profile: Profile): readonly ExternalLink[] {
   return [
-    { label: 'GitHub ↗', href: profile.githubUrl },
-    { label: 'LinkedIn ↗', href: profile.linkedinUrl },
-    { label: 'Résumé ↓', href: profile.resumeUrl }
+    { id: 'github', label: 'GitHub ↗', href: profile.githubUrl },
+    { id: 'linkedin', label: 'LinkedIn ↗', href: profile.linkedinUrl },
+    { id: 'resume', label: 'Résumé ↓', href: profile.resumeUrl }
   ];
 }

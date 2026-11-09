@@ -22,6 +22,7 @@ const required = [
   "api/content.js",
   "api/contact.js",
   "api/chat.js",
+  "api/visitors.js",
   "api/_lib/content-repository.js",
   "db/migrations/001_portfolio_content.sql",
   "db/migrations/002_redesign_content.sql",
@@ -74,6 +75,8 @@ const checks = [
   ["Content tables use row-level security", migrations.every((sql) => sql.includes("enable row level security") && sql.includes("revoke insert, update, delete"))],
   ["Page loads content from the API", store.includes("'/api/content'")],
   ["Vercel Analytics enabled in the browser only", browserEntry.includes("injectAnalytics(") && !read("src/main.server.ts").includes("@vercel/analytics")],
+  ["Speed Insights enabled in the browser only", browserEntry.includes("injectSpeedInsights(") && !read("src/main.server.ts").includes("@vercel/speed-insights")],
+  ["Analytics token stays server-side", read("api/_lib/visitor-stats.js").includes("process.env.VERCEL_ANALYTICS_TOKEN") && !frontend.includes("VERCEL_ANALYTICS_TOKEN")],
   ["No server secrets in frontend", !/RESEND_API_KEY|ANTHROPIC_API_KEY|SUPABASE_SECRET_KEY|SERVICE_ROLE|POSTGRES_URL/.test(frontend)],
   ["No console.log in frontend", !frontend.includes("console.log(")]
 ];
