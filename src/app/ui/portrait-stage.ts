@@ -1,6 +1,6 @@
 import { NgOptimizedImage } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { HeroChip } from '../content/site';
+import { HeroChip } from '../content/portfolio-content.model';
 
 @Component({
   selector: 'app-portrait-stage',

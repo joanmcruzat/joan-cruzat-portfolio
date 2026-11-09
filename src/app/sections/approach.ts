@@ -1,6 +1,5 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { PRINCIPLES } from '../content/principles';
-import { SITE } from '../content/site';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { Principle, SectionCopy } from '../content/portfolio-content.model';
 import { RevealDirective } from '../directives/reveal.directive';
 import { ArchDiagram } from '../ui/arch-diagram';
 import { PrincipleCard } from '../ui/principle-card';
@@ -13,12 +12,12 @@ import { PrincipleCard } from '../ui/principle-card';
     <section id="approach" class="section" aria-labelledby="approach-title">
       <div class="wrap">
         <div appReveal>
-          <p class="eyebrow">{{ copy.eyebrow }}</p>
-          <h2 id="approach-title" class="h2">{{ copy.before }}<span class="serif">{{ copy.accent }}</span>{{ copy.after }}</h2>
+          <p class="eyebrow">{{ copy().eyebrow }}</p>
+          <h2 id="approach-title" class="h2 pre-line">{{ copy().before }}<span class="serif">{{ copy().accent }}</span>{{ copy().after }}</h2>
         </div>
         <div class="grid">
           <div class="principles">
-            @for (principle of principles; track principle.title; let i = $index) {
+            @for (principle of principles(); track principle.id; let i = $index) {
               <app-principle-card appReveal [revealIndex]="i" [principle]="principle" [index]="i" />
             }
           </div>
@@ -57,6 +56,6 @@ import { PrincipleCard } from '../ui/principle-card';
   `
 })
 export class Approach {
-  protected readonly copy = SITE.approach;
-  protected readonly principles = PRINCIPLES;
+  readonly copy = input.required<SectionCopy>();
+  readonly principles = input.required<readonly Principle[]>();
 }

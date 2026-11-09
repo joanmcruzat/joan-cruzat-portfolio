@@ -63,7 +63,7 @@ export class Cursor {
 
   private start(): void {
     const view = this.document.defaultView;
-    if (!view?.matchMedia('(pointer: fine)').matches) return;
+    if (!view?.matchMedia?.('(pointer: fine)').matches) return;
     if (view.matchMedia('(prefers-reduced-motion: reduce)').matches) this.ease = 1;
 
     const root = this.document.documentElement;

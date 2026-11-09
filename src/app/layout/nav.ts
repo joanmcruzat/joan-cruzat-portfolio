@@ -1,5 +1,12 @@
-import { ChangeDetectionStrategy, Component, output } from '@angular/core';
-import { SITE } from '../content/site';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+
+/** In-page anchors; each id matches a section element. Layout, not content, so it lives here. */
+export const NAV_ITEMS = [
+  { id: 'work', label: 'Work' },
+  { id: 'approach', label: 'Approach' },
+  { id: 'experience', label: 'Experience' },
+  { id: 'contact', label: 'Contact' }
+] as const;
 
 @Component({
   selector: 'app-nav',
@@ -7,9 +14,9 @@ import { SITE } from '../content/site';
   template: `
     <header class="nav">
       <div class="wrap bar">
-        <a class="brand" href="#top"><span class="brand-dot" aria-hidden="true"></span>{{ site.fullName }}</a>
+        <a class="brand" href="#top"><span class="brand-dot" aria-hidden="true"></span>{{ fullName() }}</a>
         <nav class="links" aria-label="Main">
-          @for (item of site.nav; track item.id) {
+          @for (item of items; track item.id) {
             <a [href]="'#' + item.id">{{ item.label }}</a>
           }
         </nav>
@@ -23,5 +30,7 @@ import { SITE } from '../content/site';
 })
 export class Nav {
   readonly getInTouch = output();
-  protected readonly site = SITE;
+  /** Empty while content loads; the brand dot still shows. */
+  readonly fullName = input('');
+  protected readonly items = NAV_ITEMS;
 }

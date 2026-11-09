@@ -1,6 +1,6 @@
 import { NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
-import { Project } from '../content/projects';
+import { Project } from '../content/portfolio-content.model';
 
 @Component({
   selector: 'app-project-row',

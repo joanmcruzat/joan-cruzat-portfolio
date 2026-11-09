@@ -1,25 +1,36 @@
-<app-nav (getInTouch)="hireOpen.set(true)" />
+<app-nav [fullName]="profile()?.fullName ?? ''" (getInTouch)="hireOpen.set(true)" />
 
 <main id="top">
-  <app-hero (getInTouch)="hireOpen.set(true)" />
-  <app-marquee />
-  <app-work />
-  <app-approach />
-  <app-experience />
-  <app-contact />
+  @if (content(); as content) {
+    <app-hero [profile]="content.profile" (getInTouch)="hireOpen.set(true)" />
+    <app-marquee [items]="content.profile.marquee" />
+    <app-work [copy]="content.sections.work" [projects]="content.projects" />
+    <app-approach [copy]="content.sections.approach" [principles]="content.principles" />
+    <app-experience
+      [copy]="content.sections.experience"
+      [years]="content.profile.yearsExperience"
+      [jobs]="content.experience"
+      [stack]="content.stack"
+    />
+    <app-contact [copy]="content.sections.contact" [profile]="content.profile" />
+  } @else {
+    <app-content-status class="wrap" [hasError]="hasError()" (retry)="reload()" />
+  }
 </main>
 
-<app-footer />
+@if (profile(); as profile) {
+  <app-footer [fullName]="profile.fullName" />
 
-<!-- Loaded on demand so the form code stays out of the initial bundle. -->
-@if (hireOpen()) {
-  @defer {
-    <app-hire-modal [email]="site.email" (closed)="hireOpen.set(false)" />
+  <!-- Loaded on demand so the form code stays out of the initial bundle. -->
+  @if (hireOpen()) {
+    @defer {
+      <app-hire-modal [email]="profile.email" (closed)="hireOpen.set(false)" />
+    }
   }
-}
 
-@defer (on idle) {
-  <app-chat-widget [fullName]="site.fullName" [linkedinUrl]="site.linkedinUrl" />
+  @defer (on idle) {
+    <app-chat-widget [fullName]="profile.fullName" [linkedinUrl]="profile.linkedinUrl" />
+  }
 }
 
 <app-cursor />

@@ -163,6 +163,11 @@ a:hover {
   padding: 5px 11px;
 }
 
+// Keeps line breaks stored in content (e.g. a two-line heading).
+.pre-line {
+  white-space: pre-line;
+}
+
 .visually-hidden {
   position: absolute;
   width: 1px;

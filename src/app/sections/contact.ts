@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { SITE } from '../content/site';
+import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { Profile, profileLinks, SectionCopy } from '../content/portfolio-content.model';
 import { RevealDirective } from '../directives/reveal.directive';
 
 @Component({
@@ -9,15 +9,13 @@ import { RevealDirective } from '../directives/reveal.directive';
   template: `
     <section id="contact" aria-labelledby="contact-title">
       <div class="wrap inner" appReveal>
-        <p class="eyebrow">{{ copy.eyebrow }}</p>
-        <h2 id="contact-title" class="h2 title">
-          {{ copy.lineOne }}<br />{{ copy.lineTwoBefore }}<span class="serif">{{ copy.accent }}</span>
-        </h2>
-        <p class="text">{{ copy.text }}</p>
-        <a class="mail" [href]="'mailto:' + site.email">{{ site.email }} <span class="arr" aria-hidden="true">↗</span></a>
+        <p class="eyebrow">{{ copy().eyebrow }}</p>
+        <h2 id="contact-title" class="h2 title pre-line">{{ copy().before }}<span class="serif">{{ copy().accent }}</span>{{ copy().after }}</h2>
+        <p class="text">{{ copy().body }}</p>
+        <a class="mail" [href]="'mailto:' + profile().email">{{ profile().email }} <span class="arr" aria-hidden="true">↗</span></a>
         <div class="link-row">
-          @for (link of site.links; track link.href) {
-            <a class="link-u" [href]="link.href">{{ link.label }}</a>
+          @for (link of links(); track link.href) {
+            <a class="link-u" [href]="link.href" target="_blank" rel="noopener noreferrer">{{ link.label }}</a>
           }
         </div>
       </div>
@@ -26,6 +24,8 @@ import { RevealDirective } from '../directives/reveal.directive';
   styleUrl: './contact.scss'
 })
 export class Contact {
-  protected readonly site = SITE;
-  protected readonly copy = SITE.contact;
+  readonly copy = input.required<SectionCopy>();
+  readonly profile = input.required<Profile>();
+
+  protected readonly links = computed(() => profileLinks(this.profile()));
 }

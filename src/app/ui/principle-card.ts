@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
-import { Principle } from '../content/principles';
+import { Principle } from '../content/portfolio-content.model';
 
 @Component({
   selector: 'app-principle-card',

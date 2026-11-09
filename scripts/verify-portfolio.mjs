@@ -14,8 +14,7 @@ const required = [
   "src/app/app.config.ts",
   "src/app/app.routes.server.ts",
   "src/main.server.ts",
-  "src/app/content/site.ts",
-  "src/app/content/projects.ts",
+  "src/app/content/portfolio-content.store.ts",
   "src/app/features/hire/contact-api.ts",
   "src/styles/_tokens.scss",
   "src/assets/images/joan-portrait.webp",
@@ -25,6 +24,7 @@ const required = [
   "api/chat.js",
   "api/_lib/content-repository.js",
   "db/migrations/001_portfolio_content.sql",
+  "db/migrations/002_redesign_content.sql",
   "db/seed.sql"
 ];
 
@@ -50,7 +50,8 @@ const hireTemplate = read("src/app/features/hire/hire-modal.html");
 const contact = read("api/contact.js");
 const inquiry = read("api/_lib/inquiry.js");
 const repository = read("api/_lib/content-repository.js");
-const migration = read("db/migrations/001_portfolio_content.sql");
+const migrations = ["001_portfolio_content.sql", "002_redesign_content.sql"].map((file) => read(`db/migrations/${file}`));
+const store = read("src/app/content/portfolio-content.store.ts");
 const tokens = read("src/styles/_tokens.scss");
 const motion = read("src/styles/_motion.scss");
 const angular = JSON.parse(read("angular.json"));
@@ -69,7 +70,8 @@ const checks = [
   ["HTML email escapes input", inquiry.includes("escapeHtml(inquiry.message)")],
   ["Honeypot exists", hireTemplate.includes("companyFax") && contact.includes("companyFax")],
   ["Content read with publishable key only", repository.includes("SUPABASE_PUBLISHABLE_KEY") && !/SECRET|SERVICE_ROLE|POSTGRES_URL/.test(repository)],
-  ["Content tables use row-level security", migration.includes("enable row level security") && migration.includes("revoke insert, update, delete")],
+  ["Content tables use row-level security", migrations.every((sql) => sql.includes("enable row level security") && sql.includes("revoke insert, update, delete"))],
+  ["Page loads content from the API", store.includes("'/api/content'")],
   ["No server secrets in frontend", !/RESEND_API_KEY|ANTHROPIC_API_KEY|SUPABASE_SECRET_KEY|SERVICE_ROLE|POSTGRES_URL/.test(frontend)],
   ["No console.log in frontend", !frontend.includes("console.log(")]
 ];

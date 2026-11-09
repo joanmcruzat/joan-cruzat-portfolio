@@ -1,15 +1,16 @@
 import { provideZonelessChangeDetection } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { Project } from '../content/projects';
+import { Project } from '../content/portfolio-content.model';
 import { ProjectRow } from './project-row';
 
 const base: Project = {
-  id: 'payments',
+  id: 1,
   category: 'Payments',
   title: 'Gateway',
   description: 'Card payments.',
   tags: ['.NET', 'SQL'],
-  result: { kind: 'metric', value: '10k+', label: 'transactions processed' }
+  result: { kind: 'metric', value: '10k+', label: 'transactions processed' },
+  caseStudyUrl: null
 };
 
 describe('ProjectRow', () => {

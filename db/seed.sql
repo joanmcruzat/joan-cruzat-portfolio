@@ -1,36 +1,31 @@
--- Knowledge base for the AI chat assistant (api/chat.js). The page itself renders from
--- src/app/content/*.ts, so keep the two in sync when copy changes. Apply with `npm run db:seed`.
+-- All portfolio copy. The page (via GET /api/content) and the AI chat assistant both read
+-- these tables, so this file is the one place to edit content. Apply with `npm run db:seed`.
 -- The seed is idempotent: it rewrites every content table inside one transaction.
 
 begin;
 
 insert into profile (
-  id, full_name, headline, availability, hero_title, hero_highlight, summary, years_experience,
-  focus, mindset, ticker, about_heading, about_paragraphs, about_quote, values_summary,
-  contact_heading, contact_text, footer_tagline, email, github_url, linkedin_url, resume_url,
-  meta_title, meta_description, og_description
+  id, full_name, headline, availability, years_experience, summary,
+  hero_lines, hero_accent, hero_lead, hero_intro, portrait_alt,
+  chip_years_label, chip_stack, chip_volume_value, chip_volume_label, marquee,
+  email, github_url, linkedin_url, resume_url, meta_title, meta_description, og_description
 ) values (
   1,
   'Joan Cruzat',
   'Senior Full Stack Engineer',
   'Open to selected remote roles',
-  'Software that works is the',
-  'minimum.',
-  'Senior full-stack engineer with 9+ years in .NET and Angular, building fintech integrations, payment flows, and the dashboards teams run them from.',
   '9+',
-  array['.NET', 'Angular', 'APIs', 'Databases'],
-  array['reliable', 'scalable', 'maintainable'],
+  'Senior full-stack engineer with 9+ years in .NET and Angular, building fintech integrations, payment flows, and the dashboards teams run them from.',
+  array['Software that', 'works is the'],
+  'minimum.',
+  'I build software that’s secure, understandable, and ready for the next change.',
+  'I’m Joan, a senior full-stack engineer with 9+ years in .NET and Angular. I build fintech integrations, payment flows, and the dashboards teams run them from.',
+  'Joan Cruzat, smiling, in a black blazer',
+  E'years in\nproduction',
+  '.NET · Angular',
+  '10k+',
+  E'transactions\nprocessed',
   array['Fintech integrations', 'Payment gateways', 'KYC · MFA · SSO', 'REST APIs', 'Operator dashboards', 'SQL performance', 'AWS'],
-  'More than shipping code.',
-  array[
-    'I build reliable software by combining clean architecture, practical engineering, and a strong understanding of business requirements.',
-    'My experience spans frontend, backend, databases, integrations, testing, deployment and production troubleshooting. That lets me look at a feature as a complete system—not just a ticket to implement.'
-  ],
-  'The goal isn''t simply to make software work. It''s to make it reliable, understandable, secure, and ready for the next change.',
-  '.NET · Angular · APIs · Cloud · Databases',
-  'Have a system that needs to just work?',
-  'I''m open to selected remote roles and contract work: building, modernizing, integrating or scaling.',
-  'Senior Full Stack Engineer',
   'joanmcruzat@gmail.com',
   'https://github.com/joanmcruzat',
   'https://linkedin.com/in/joan-cruzat',
@@ -43,20 +38,18 @@ on conflict (id) do update set
   full_name = excluded.full_name,
   headline = excluded.headline,
   availability = excluded.availability,
-  hero_title = excluded.hero_title,
-  hero_highlight = excluded.hero_highlight,
-  summary = excluded.summary,
   years_experience = excluded.years_experience,
-  focus = excluded.focus,
-  mindset = excluded.mindset,
-  ticker = excluded.ticker,
-  about_heading = excluded.about_heading,
-  about_paragraphs = excluded.about_paragraphs,
-  about_quote = excluded.about_quote,
-  values_summary = excluded.values_summary,
-  contact_heading = excluded.contact_heading,
-  contact_text = excluded.contact_text,
-  footer_tagline = excluded.footer_tagline,
+  summary = excluded.summary,
+  hero_lines = excluded.hero_lines,
+  hero_accent = excluded.hero_accent,
+  hero_lead = excluded.hero_lead,
+  hero_intro = excluded.hero_intro,
+  portrait_alt = excluded.portrait_alt,
+  chip_years_label = excluded.chip_years_label,
+  chip_stack = excluded.chip_stack,
+  chip_volume_value = excluded.chip_volume_value,
+  chip_volume_label = excluded.chip_volume_label,
+  marquee = excluded.marquee,
   email = excluded.email,
   github_url = excluded.github_url,
   linkedin_url = excluded.linkedin_url,
@@ -65,43 +58,44 @@ on conflict (id) do update set
   meta_description = excluded.meta_description,
   og_description = excluded.og_description;
 
-truncate experience, project, skill, principle, tool, quality_area restart identity;
+truncate experience, project, principle, stack_group, section restart identity;
 
-insert into experience (sort_order, period, role, company, description, tech) values
+insert into section (key, eyebrow, heading_before, heading_accent, heading_after, body) values
+  ('work', '01 — Selected work', 'Systems that move ', 'money', ' and data.', null),
+  ('approach', '02 — Approach', 'I look at a feature as a ', 'whole system', ', not a ticket.', null),
+  ('experience', '03 — Experience', '', '', '',
+   'years shipping and supporting production systems, from database to UI.'),
+  ('contact', '04 — Contact', E'Have a system that\nneeds to ', 'just work?', '',
+   'I’m open to selected remote roles and contract work: building, modernizing, integrating or scaling.');
+
+insert into experience (sort_order, period, role, company, description) values
   (1, '2022 — Now', 'Senior .NET Full Stack Engineer', 'Xentra Solutions',
-   'Enterprise .NET applications, REST APIs, financial integrations and microservices on AWS. Tuned SQL queries and stored procedures, cutting key query times by up to 90%.',
-   array['.NET', 'Angular', 'MySQL', 'AWS', 'Microservices']),
+   'Enterprise .NET applications, REST APIs, financial integrations and microservices on AWS. Tuned SQL queries and stored procedures, cutting key query times by up to 90%.'),
   (2, '2020 — Now', 'Angular Frontend Developer', 'Concurrent role',
-   'Operator dashboards with reporting and charts, reusable components and complex forms, in TypeScript, RxJS, Angular Material and Tailwind CSS.',
-   array['Angular', 'TypeScript', 'RxJS', 'Jasmine']),
+   'Operator dashboards with reporting and charts, reusable components and complex forms, in TypeScript, RxJS, Angular Material and Tailwind CSS.'),
   (3, '2016 — 2020', 'PHP Full Stack Developer', 'Academic systems',
-   'Database-driven academic information systems and full-stack web apps in PHP, JavaScript and SQL.',
-   array['PHP', 'JavaScript', 'SQL']);
+   'Database-driven academic information systems and full-stack web apps in PHP, JavaScript and SQL.');
 
-insert into project (sort_order, title, tag, description, tech) values
-  (1, 'Uniteller Remittance Integration', 'Fintech · Remittance',
-   'End-to-end onboarding and transfer flow for a third-party remittance provider: signup, KYC, MFA and Plaid bank linking, backed by .NET services. 10k+ transactions processed.',
-   array['.NET', 'REST APIs', 'Plaid', 'KYC', 'MFA']),
-  (2, 'Moolah Play / MarkerTrax', 'Operator platform',
-   'An Angular operator dashboard for reporting, charts, user management and settings, connected to REST APIs. 1k+ active users.',
-   array['Angular', 'TypeScript', 'REST APIs', 'Data viz']),
-  (3, 'NMI Payment Gateway', 'Payments',
+-- A project shows either a metric (result_value + result_label) or a short note (result_note).
+insert into project (sort_order, category, title, description, tags, result_value, result_label, result_note) values
+  (1, 'Fintech · Remittance', 'Uniteller Remittance Integration',
+   'End-to-end onboarding and transfer flow for a third-party remittance provider: signup, KYC, MFA and Plaid bank linking, backed by .NET services.',
+   array['.NET', 'REST APIs', 'Plaid', 'KYC', 'MFA'], '10k+', 'transactions processed', null),
+  (2, 'Operator platform', 'Moolah Play / MarkerTrax',
+   'An Angular operator dashboard for reporting, charts, user management and settings, connected to REST APIs.',
+   array['Angular', 'TypeScript', 'REST APIs', 'Data viz'], '1k+', 'active users', null),
+  (3, 'Payments', 'NMI Payment Gateway',
    'Card payments end to end: tokenized card storage, transaction processing, and a database design built for traceability.',
-   array['.NET', 'Payment APIs', 'SQL', 'Security']),
-  (4, 'Usio GPR / Akimbo', 'Financial services',
+   array['.NET', 'Payment APIs', 'SQL', 'Security'], null, null, E'Card vault, charges\nand refunds'),
+  (4, 'Financial services', 'Usio GPR / Akimbo',
    'Prepaid card integration with single sign-on and token handling, coordinating the Angular frontend and .NET backend.',
-   array['.NET', 'Angular', 'SSO', 'API integration']),
-  (5, 'Bloxcross Crypto Integration', 'API security',
+   array['.NET', 'Angular', 'SSO', 'API integration'], null, null, E'SSO and token\nlifecycle'),
+  (5, 'API security', 'Bloxcross Crypto Integration',
    'A .NET 8 service integration secured with HMAC request signing and JWT, plus structured logging, validation and clear error handling.',
-   array['.NET 8', 'HMAC', 'JWT', 'Microservices']),
-  (6, 'Academic Information Management', 'Education',
+   array['.NET 8', 'HMAC', 'JWT', 'Microservices'], null, null, E'Signed, logged,\nvalidated requests'),
+  (6, 'Education', 'Academic Information Management',
    'Database-driven systems for student records and academic workflows, built full stack in PHP.',
-   array['PHP', 'JavaScript', 'SQL']);
-
-insert into skill (sort_order, name) values
-  (1, '.NET'), (2, 'C#'), (3, 'Angular'), (4, 'TypeScript'), (5, 'REST APIs'), (6, 'SQL Server'),
-  (7, 'MySQL'), (8, 'PostgreSQL'), (9, 'EF Core'), (10, 'Microservices'), (11, 'AWS'), (12, 'Redis'),
-  (13, 'CI/CD'), (14, 'Playwright');
+   array['PHP', 'JavaScript', 'SQL'], null, null, E'Where it\nstarted');
 
 insert into principle (sort_order, title, description) values
   (1, 'Performance', 'Query plans, indexing, caching and payload size. A 200 response is the start, not the goal.'),
@@ -111,22 +105,12 @@ insert into principle (sort_order, title, description) values
   (5, 'Scalability', 'Planning for data growth, traffic, async work and sensible service boundaries.'),
   (6, 'Developer experience', 'Docs, tests and CI/CD that let a team ship with confidence.');
 
-insert into tool (sort_order, name, description, icon_url, icon_alt) values
-  (1, '.NET', 'Backend & APIs', 'https://cdn.jsdelivr.net/gh/devicons/devicon@master/icons/dot-net/dot-net-original.svg', '.NET'),
-  (2, 'C#', 'Application development', 'https://cdn.jsdelivr.net/gh/devicons/devicon@master/icons/csharp/csharp-original.svg', 'C#'),
-  (3, 'Angular', 'Frontend applications', 'https://cdn.jsdelivr.net/gh/devicons/devicon@master/icons/angular/angular-original.svg', 'Angular'),
-  (4, 'TypeScript', 'Frontend engineering', 'https://cdn.jsdelivr.net/gh/devicons/devicon@master/icons/typescript/typescript-original.svg', 'TypeScript'),
-  (5, 'SQL Server', 'Relational data', 'https://cdn.jsdelivr.net/gh/devicons/devicon@master/icons/microsoftsqlserver/microsoftsqlserver-plain.svg', 'Microsoft SQL Server'),
-  (6, 'MySQL', 'Relational data', 'https://cdn.jsdelivr.net/gh/devicons/devicon@master/icons/mysql/mysql-original.svg', 'MySQL'),
-  (7, 'PostgreSQL', 'Relational data', 'https://cdn.jsdelivr.net/gh/devicons/devicon@master/icons/postgresql/postgresql-original.svg', 'PostgreSQL'),
-  (8, 'AWS', 'Cloud infrastructure', 'https://cdn.jsdelivr.net/gh/devicons/devicon@master/icons/amazonwebservices/amazonwebservices-original-wordmark.svg', 'Amazon Web Services'),
-  (9, 'Redis', 'Caching & performance', 'https://cdn.jsdelivr.net/gh/devicons/devicon@master/icons/redis/redis-original.svg', 'Redis'),
-  (10, 'Playwright', 'E2E automation', 'https://cdn.jsdelivr.net/gh/devicons/devicon@master/icons/playwright/playwright-original.svg', 'Playwright'),
-  (11, 'Git', 'Version control', 'https://cdn.jsdelivr.net/gh/devicons/devicon@master/icons/git/git-original.svg', 'Git'),
-  (12, 'Docker', 'Application containers', 'https://cdn.jsdelivr.net/gh/devicons/devicon@master/icons/docker/docker-original.svg', 'Docker');
-
-insert into quality_area (sort_order, title, description) values
-  (1, 'Testing & Quality', 'Unit Testing · Jasmine · Playwright · Cypress · API Testing · E2E Testing · CI Testing · TDD Concepts'),
-  (2, 'AI-Assisted Development', 'GitHub Copilot · ChatGPT · AI coding assistants. AI-generated output is reviewed, tested, and validated for security, correctness and performance.');
+insert into stack_group (sort_order, title, lines) values
+  (1, 'Backend', array['.NET / .NET 8 · C#', 'REST APIs · Microservices']),
+  (2, 'Frontend', array['Angular · TypeScript', 'RxJS · Material · Tailwind']),
+  (3, 'Data', array['SQL Server · MySQL', 'PostgreSQL · Redis']),
+  (4, 'Cloud & DevOps', array['AWS · Docker · Linux', 'CI/CD · Git']),
+  (5, 'Quality', array['Jasmine · Playwright · Cypress', 'API and E2E testing']),
+  (6, 'AI-assisted', array['Copilot and ChatGPT, with every', 'output reviewed and tested']);
 
 commit;

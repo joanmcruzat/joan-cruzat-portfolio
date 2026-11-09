@@ -6,13 +6,14 @@ const CACHE_TTL_MS = 5 * 60_000;
 
 const QUERIES = {
   profile: "profile?select=*&id=eq.1",
-  experience: "experience?select=period,role,company,description,tech&order=sort_order",
-  projects: "project?select=title,tag,description,tech&order=sort_order",
-  skills: "skill?select=name&order=sort_order",
-  principles: "principle?select=title,description&order=sort_order",
-  tools: "tool?select=name,description,icon_url,icon_alt&order=sort_order",
-  qualityAreas: "quality_area?select=title,description&order=sort_order"
+  sections: "section?select=key,eyebrow,heading_before,heading_accent,heading_after,body",
+  projects: "project?select=id,category,title,description,tags,result_value,result_label,result_note,case_study_url&order=sort_order",
+  experience: "experience?select=id,period,role,company,description&order=sort_order",
+  principles: "principle?select=id,title,description&order=sort_order",
+  stack: "stack_group?select=id,title,lines&order=sort_order"
 };
+
+const SECTION_KEYS = ["work", "approach", "experience", "contact"];
 
 export class ContentUnavailableError extends Error {
   constructor(message, options) {
@@ -26,20 +27,21 @@ function toProfile(row) {
     fullName: row.full_name,
     headline: row.headline,
     availability: row.availability,
-    heroTitle: row.hero_title,
-    heroHighlight: row.hero_highlight,
-    summary: row.summary,
     yearsExperience: row.years_experience,
-    focus: row.focus,
-    mindset: row.mindset,
-    ticker: row.ticker,
-    aboutHeading: row.about_heading,
-    aboutParagraphs: row.about_paragraphs,
-    aboutQuote: row.about_quote,
-    valuesSummary: row.values_summary,
-    contactHeading: row.contact_heading,
-    contactText: row.contact_text,
-    footerTagline: row.footer_tagline,
+    summary: row.summary,
+    hero: {
+      lines: row.hero_lines,
+      accentLine: row.hero_accent,
+      lead: row.hero_lead,
+      intro: row.hero_intro,
+      portraitAlt: row.portrait_alt,
+      chips: {
+        years: { value: row.years_experience, label: row.chip_years_label },
+        stack: row.chip_stack,
+        volume: { value: row.chip_volume_value, label: row.chip_volume_label }
+      }
+    },
+    marquee: row.marquee,
     email: row.email,
     githubUrl: row.github_url,
     linkedinUrl: row.linkedin_url,
@@ -50,22 +52,50 @@ function toProfile(row) {
   };
 }
 
+function toSections(rows) {
+  const byKey = new Map(rows.map((row) => [row.key, row]));
+  return Object.fromEntries(SECTION_KEYS.map((key) => {
+    const row = byKey.get(key);
+    if (!row) throw new ContentUnavailableError(`Section "${key}" is missing.`);
+    return [key, {
+      eyebrow: row.eyebrow,
+      before: row.heading_before,
+      accent: row.heading_accent,
+      after: row.heading_after,
+      body: row.body
+    }];
+  }));
+}
+
+// The database check constraint guarantees exactly one of metric or note is set.
+function toProjectResult(row) {
+  return row.result_value !== null
+    ? { kind: "metric", value: row.result_value, label: row.result_label }
+    : { kind: "note", text: row.result_note };
+}
+
+function toProject(row) {
+  return {
+    id: row.id,
+    category: row.category,
+    title: row.title,
+    description: row.description,
+    tags: row.tags,
+    result: toProjectResult(row),
+    caseStudyUrl: row.case_study_url
+  };
+}
+
 // Maps raw PostgREST rows to the content contract served by GET /api/content.
 export function toPortfolioContent(rows) {
   if (rows.profile.length !== 1) throw new ContentUnavailableError("Profile row is missing.");
   return {
     profile: toProfile(rows.profile[0]),
+    sections: toSections(rows.sections),
+    projects: rows.projects.map(toProject),
     experience: rows.experience,
-    projects: rows.projects,
-    skills: rows.skills.map((row) => row.name),
     principles: rows.principles,
-    tools: rows.tools.map((row) => ({
-      name: row.name,
-      description: row.description,
-      iconUrl: row.icon_url,
-      iconAlt: row.icon_alt
-    })),
-    qualityAreas: rows.qualityAreas
+    stack: rows.stack
   };
 }
 

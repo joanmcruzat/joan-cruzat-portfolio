@@ -1,5 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { SITE } from '../content/site';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 @Component({
   selector: 'app-footer',
@@ -7,7 +6,7 @@ import { SITE } from '../content/site';
   template: `
     <footer class="wrap">
       <div class="foot">
-        <span>© {{ year }} {{ fullName }}</span>
+        <span>© {{ year }} {{ fullName() }}</span>
         <span class="mono">Built with Angular</span>
         <a class="link-u" href="#top">Back to top ↑</a>
       </div>
@@ -29,6 +28,6 @@ import { SITE } from '../content/site';
   `
 })
 export class Footer {
-  protected readonly fullName = SITE.fullName;
+  readonly fullName = input.required<string>();
   protected readonly year = new Date().getFullYear();
 }

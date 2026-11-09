@@ -1,5 +1,24 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { ARCHITECTURE } from '../content/principles';
+
+/** The "typical system I build" illustration, top to bottom. Drawn like a picture, so it lives with the component. */
+const ARCHITECTURE = {
+  label: 'A typical system I build',
+  ariaLabel:
+    'Typical system architecture: Angular frontend, .NET Web API, business layer, data access, then databases, cache and third-party APIs on AWS',
+  nodes: [
+    { label: 'Angular frontend', layer: 'UI' },
+    { label: '.NET Web API', layer: 'REST' },
+    { label: 'Application / business layer', layer: 'DOMAIN' },
+    { label: 'Data access layer', layer: 'EF · SQL' }
+  ],
+  leaves: [
+    ['SQL Server', 'MySQL · Postgres'],
+    ['Redis', 'cache'],
+    ['Third-party', 'APIs']
+  ],
+  cloud: 'AWS · cloud infrastructure',
+  qualities: ['Secure', 'Scalable', 'Observable', 'Testable']
+} as const;
 
 @Component({
   selector: 'app-arch-diagram',

@@ -1,5 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { SITE } from '../content/site';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 @Component({
   selector: 'app-marquee',
@@ -8,7 +7,7 @@ import { SITE } from '../content/site';
   template: `
     <div class="track">
       @for (copy of copies; track copy) {
-        @for (item of items; track item) {
+        @for (item of items(); track item) {
           <span>{{ item }}</span><i>✦</i>
         }
       }
@@ -37,6 +36,6 @@ import { SITE } from '../content/site';
   `
 })
 export class Marquee {
-  protected readonly items = SITE.marquee;
+  readonly items = input.required<readonly string[]>();
   protected readonly copies = [0, 1] as const;
 }
