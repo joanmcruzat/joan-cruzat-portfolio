@@ -1,11 +1,12 @@
 import { NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { Project } from '../content/portfolio-content.model';
+import { TrackDirective } from '../core/analytics/track.directive';
 
 @Component({
   selector: 'app-project-row',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [NgTemplateOutlet],
+  imports: [NgTemplateOutlet, TrackDirective],
   template: `
     <ng-template #body>
       <span class="num mono">{{ number() }}</span>
@@ -34,7 +35,7 @@ import { Project } from '../content/portfolio-content.model';
     </ng-template>
 
     @if (project().caseStudyUrl; as url) {
-      <a class="row" [href]="url"><ng-container [ngTemplateOutlet]="body" /></a>
+      <a class="row" [href]="url" appTrack="project_opened" [trackProps]="{ project: project().title }"><ng-container [ngTemplateOutlet]="body" /></a>
     } @else {
       <div class="row"><ng-container [ngTemplateOutlet]="body" /></div>
     }

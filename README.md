@@ -11,7 +11,8 @@ Browser (Angular 21, zoneless, signals, prerendered + hydrated)
   GET  /api/content  -> api/content.js  -> Supabase content (CDN-cached 5 min)
   POST /api/chat     -> api/chat.js     -> Supabase content -> system prompt -> Claude
   POST /api/contact  -> api/contact.js  -> Resend -> Joan's inbox
-  page views         -> Vercel Web Analytics (src/main.ts; enable it in the Vercel project's Analytics tab)
+  page views, clicks -> Vercel Web Analytics + Speed Insights (src/main.ts, src/app/core/analytics/)
+  GET  /api/visitors -> api/visitors.js -> Vercel Analytics API -> footer visitor count (CDN-cached 1 h)
 ```
 
 | Path | Responsibility |
@@ -119,6 +120,22 @@ RESEND_FROM=Joan Cruzat <hello@yourdomain.com>
 ```
 
 Never put `RESEND_API_KEY` in Angular source code.
+
+Optional, for the visitor count in the footer (without them the footer just leaves it out):
+
+```text
+VERCEL_ANALYTICS_TOKEN=xxxxxxxx           # Vercel -> Account Settings -> Tokens, scoped to your team
+VERCEL_ANALYTICS_PROJECT_ID=prj_xxxxxxxx  # Project -> Settings -> General -> Project ID
+VERCEL_ANALYTICS_TEAM_ID=team_xxxxxxxx    # Team -> Settings -> General -> Team ID
+```
+
+The token stays server-side in `api/visitors.js`. Vercel tokens can't be limited to read-only, so give it a short expiry and rotate it.
+
+### Analytics
+
+- **Where to see it:** Vercel -> your project -> **Analytics** (visitors, pages, referrers, countries, custom events) and **Speed Insights** (real-visitor LCP, CLS, INP).
+- **Custom events** are sent from `src/app/core/analytics/analytics.ts`: `get_in_touch_opened`, `inquiry_sent`, `chat_opened`, `chat_message_sent`, `profile_link_clicked`, `email_clicked`, `project_opened`. Add `appTrack="event_name"` to any clickable element to record more. Vercel only shows custom events on the Pro plan; on Hobby they are sent but not listed.
+- In development, both scripts log to the browser console instead of sending data.
 
 ## 5. Deploy with GitHub + Vercel
 

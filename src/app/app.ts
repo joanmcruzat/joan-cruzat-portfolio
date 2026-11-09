@@ -1,4 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { Analytics } from './core/analytics/analytics';
+import { VisitorStatsStore } from './core/analytics/visitor-stats.store';
 import { PortfolioContentStore } from './content/portfolio-content.store';
 import { ChatWidget } from './features/chat/chat-widget';
 import { HireModal } from './features/hire/hire-modal';
@@ -24,11 +26,18 @@ import { Cursor } from './ui/cursor';
 })
 export class App {
   private readonly store = inject(PortfolioContentStore);
+  private readonly analytics = inject(Analytics);
 
   protected readonly content = this.store.content;
   protected readonly profile = this.store.profile;
   protected readonly hasError = this.store.hasError;
+  protected readonly visitors = inject(VisitorStatsStore).stats;
   protected readonly hireOpen = signal(false);
+
+  protected openHire(source: 'nav' | 'hero'): void {
+    this.hireOpen.set(true);
+    this.analytics.track('get_in_touch_opened', { source });
+  }
 
   protected reload(): void {
     this.store.reload();

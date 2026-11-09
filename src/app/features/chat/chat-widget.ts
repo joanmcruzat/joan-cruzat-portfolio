@@ -3,6 +3,7 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { catchError, finalize, map, of } from 'rxjs';
+import { Analytics } from '../../core/analytics/analytics';
 import { problemDetail } from '../../core/http/problem-details';
 import { ChatApi, ChatMessage } from './chat-api';
 
@@ -21,6 +22,7 @@ export class ChatWidget {
   readonly linkedinUrl = input.required<string>();
 
   private readonly chatApi = inject(ChatApi);
+  private readonly analytics = inject(Analytics);
   private readonly injector = inject(Injector);
   private readonly destroyRef = inject(DestroyRef);
   private readonly chatLog = viewChild<ElementRef<HTMLElement>>('chatLog');
@@ -43,7 +45,9 @@ export class ChatWidget {
 
   toggle(): void {
     this.isOpen.update((isOpen) => !isOpen);
-    if (this.isOpen()) this.scrollToEnd();
+    if (!this.isOpen()) return;
+    this.analytics.track('chat_opened');
+    this.scrollToEnd();
   }
 
   close(): void {
@@ -62,6 +66,7 @@ export class ChatWidget {
     this.messages.update((messages) => [...messages, { role: 'user', content: text }]);
     this.draft.set('');
     this.sending.set(true);
+    this.analytics.track('chat_message_sent');
     this.scrollToEnd();
 
     this.chatApi.send(this.messages()).pipe(

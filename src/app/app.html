@@ -1,8 +1,8 @@
-<app-nav [fullName]="profile()?.fullName ?? ''" (getInTouch)="hireOpen.set(true)" />
+<app-nav [fullName]="profile()?.fullName ?? ''" (getInTouch)="openHire('nav')" />
 
 <main id="top">
   @if (content(); as content) {
-    <app-hero [profile]="content.profile" (getInTouch)="hireOpen.set(true)" />
+    <app-hero [profile]="content.profile" (getInTouch)="openHire('hero')" />
     <app-marquee [items]="content.profile.marquee" />
     <app-work [copy]="content.sections.work" [projects]="content.projects" />
     <app-approach [copy]="content.sections.approach" [principles]="content.principles" />
@@ -19,7 +19,7 @@
 </main>
 
 @if (profile(); as profile) {
-  <app-footer [fullName]="profile.fullName" />
+  <app-footer [fullName]="profile.fullName" [visitors]="visitors()" />
 
   <!-- Loaded on demand so the form code stays out of the initial bundle. -->
   @if (hireOpen()) {
