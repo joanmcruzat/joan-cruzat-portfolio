@@ -153,16 +153,11 @@ describe('App', () => {
       http.expectOne(VISITORS_URL).flush({ visitors: 1234, days: 30 });
       await settle();
 
-      const line = el.querySelector('app-hero .visitors')?.textContent?.replace(/\s+/g, ' ');
-      expect(line).toContain('1234');
-      expect(line).toContain('visitors · last 30 days');
-    });
-
-    it('uses the singular for one visitor', async () => {
-      http.expectOne(VISITORS_URL).flush({ visitors: 1, days: 30 });
-      await settle();
-
-      expect(el.querySelector('app-hero .visitors')?.textContent).toMatch(/1\s+visitor · last 30 days/);
+      const pill = el.querySelector('app-hero .visitors')!;
+      expect(pill.querySelector('.label')?.textContent).toBe('Site visitors');
+      expect(pill.querySelector('.count')?.textContent).toContain('1234');
+      expect(pill.querySelector('.period')?.textContent).toBe('last 30 days');
+      expect(pill.querySelector('.live-tag')?.textContent).toContain('Live');
     });
 
     it('leaves the visitor count out when /api/visitors fails', async () => {

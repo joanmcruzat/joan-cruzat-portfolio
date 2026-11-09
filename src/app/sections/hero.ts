@@ -17,10 +17,11 @@ import { PortraitStage } from '../ui/portrait-stage';
           <div class="pills">
             <p class="pill fade-in"><span class="dot" aria-hidden="true"></span>{{ profile().availability }}</p>
             @if (visitors(); as stats) {
-              <p class="pill visitors fade-in">
-                <span class="dot live" aria-hidden="true"></span>
+              <p class="visitors fade-in">
+                <span class="live-tag"><span class="dot live" aria-hidden="true"></span>Live</span>
+                <span class="label">Site visitors</span>
                 <app-count-up class="count" [to]="stats.visitors" />
-                {{ stats.visitors === 1 ? 'visitor' : 'visitors' }} · last {{ stats.days }} days
+                <span class="period">last {{ stats.days }} days</span>
               </p>
             }
           </div>
