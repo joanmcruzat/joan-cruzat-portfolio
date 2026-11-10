@@ -1,0 +1,12 @@
+{
+  "/api/content": {
+    "target": "https://joanmcruzat.vercel.app",
+    "secure": true,
+    "changeOrigin": true
+  },
+  "/api/visitors": {
+    "target": "https://joanmcruzat.vercel.app",
+    "secure": true,
+    "changeOrigin": true
+  }
+}
