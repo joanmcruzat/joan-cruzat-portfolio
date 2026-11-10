@@ -1,6 +1,6 @@
 # Joan Cruzat Portfolio — Angular + Vercel
 
-A dark, single-page Angular portfolio. All copy lives in Supabase Postgres: the page loads it from `GET /api/content`, and the AI chat assistant answers from the same rows. Vercel functions also send "Get in touch" inquiries through Resend. The page shell is prerendered to static HTML at build time.
+A single-page Angular portfolio in three colours: a Cloud White page, Sky Blue supporting details and one Scarlet Red accent. All copy lives in Supabase Postgres: the page loads it from `GET /api/content`, and the AI chat assistant answers from the same rows. Vercel functions also send "Get in touch" inquiries through Resend. The page shell is prerendered to static HTML at build time.
 
 The approved visual design is [`design/design-reference.html`](design/design-reference.html).
 
@@ -39,11 +39,13 @@ Browser (Angular 21, zoneless, signals, prerendered + hydrated)
 
 The nav anchors (`src/app/layout/nav.ts`) and the architecture diagram (`src/app/ui/arch-diagram.ts`) are layout, so they stay in code.
 
-**Locally**, `ng serve` has no `/api`, so the page shows its "Content unavailable" state. Use `npx vercel dev` to see real content.
+**Locally**, `ng serve` has no `/api` of its own. `proxy.conf.json` forwards the two read-only calls (`/api/content`, `/api/visitors`) to the live site, so the page shows the published copy. Seed changes appear locally only after `npm run db:seed`. The chat and contact form are not proxied; use `npx vercel dev` to exercise them.
 
 **Swap the portrait.** Replace `src/assets/images/joan-portrait.webp` with a background-removed image. If its pixel size changes, update `width`/`height` on the `<img>` in `src/app/ui/portrait-stage.ts` so the layout doesn't shift. Regenerate `src/assets/images/og-image.png` (1200×630, used for social previews) if the hero changes.
 
-**Change the accent colour.** Edit `--accent` in `src/styles/_tokens.scss`. Glows and borders derive from it with `color-mix()`.
+**Change the colours.** Edit the palette at the top of `src/styles/_tokens.scss` (`--sky-blue`, `--cloud-white`, `--scarlet-red` and their darker `-deep` / `-ink` steps for small text). Everything else derives from those.
+
+**Dark mode.** The sun/moon button in the nav switches themes; the choice is saved in `localStorage` and light is the default. The dark values are the `:root[data-theme='dark']` block in `_tokens.scss`, and the switch itself is `src/app/core/theme/theme.store.ts` plus a small inline script in `src/index.html` that applies a saved choice before first paint.
 
 **Résumé.** Replace `src/assets/resume.pdf`.
 

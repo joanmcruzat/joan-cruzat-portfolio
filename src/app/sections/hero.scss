@@ -1,5 +1,83 @@
 :host {
   display: block;
+  position: relative;
+  overflow: hidden;
+}
+
+section {
+  position: relative;
+}
+
+// Background details in Sky Blue, all on the portrait side so the copy keeps its contrast. They reuse
+// the site's own motifs: the diagram's grid, the portrait's dashed ring and the marquee's sparkle.
+.sky {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+
+  // Blueprint grid that fades out toward the copy.
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(color-mix(in srgb, var(--brand) 20%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in srgb, var(--brand) 20%, transparent) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(75% 95% at 88% 28%, #000, transparent 72%);
+    -webkit-mask-image: radial-gradient(75% 95% at 88% 28%, #000, transparent 72%);
+  }
+
+  // Soft sky-blue glows on the right, behind the portrait.
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(34% 26% at 96% 100%, color-mix(in srgb, var(--brand) 26%, transparent), transparent 72%),
+      radial-gradient(26% 20% at 66% 104%, color-mix(in srgb, var(--brand) 16%, transparent), transparent 72%),
+      radial-gradient(22% 16% at 100% 6%, color-mix(in srgb, var(--brand) 18%, transparent), transparent 72%);
+  }
+}
+
+.orbit {
+  position: absolute;
+  border: 1px dashed color-mix(in srgb, var(--brand) 45%, transparent);
+  border-radius: 50%;
+}
+
+.orbit-a {
+  top: -260px;
+  right: -200px;
+  width: 720px;
+  height: 720px;
+  animation: spin 120s linear infinite;
+}
+
+.orbit-b {
+  right: -340px;
+  bottom: -420px;
+  width: 900px;
+  height: 900px;
+  border-style: solid;
+  border-color: color-mix(in srgb, var(--brand) 22%, transparent);
+}
+
+.spark {
+  position: absolute;
+  font-size: 14px;
+  line-height: 1;
+  color: var(--brand);
+  animation: twinkle 4.5s ease-in-out infinite;
+}
+
+.spark-a { top: 14%; right: 44%; }
+.spark-b { top: 9%; right: 6%; font-size: 20px; animation-delay: -1.5s; }
+.spark-c { bottom: 16%; right: 47%; font-size: 11px; animation-delay: -3s; }
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.35; transform: scale(0.85); }
+  50% { opacity: 1; transform: scale(1); }
 }
 
 .hero-grid {
@@ -11,29 +89,12 @@
   padding: 56px 0 72px;
 }
 
-// Availability on top, live visitor counter under it. Room for both is reserved so the
-// counter appearing after /api/visitors answers doesn't push the headline down.
+// Room for the live visitor counter is reserved, so it appearing after /api/visitors
+// answers doesn't push the headline down.
 .pills {
   display: flex;
-  flex-direction: column;
   align-items: flex-start;
-  gap: 10px;
-  min-height: 84px;
-}
-
-.pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  margin: 0;
-  padding: 8px 14px 8px 12px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-pill);
-  background: rgba(255, 255, 255, 0.02);
-  font-size: 12px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--muted);
+  min-height: 40px;
 }
 
 .dot {
@@ -41,14 +102,14 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: var(--status);
+  background: var(--cta);
 
   &::after {
     content: '';
     position: absolute;
     inset: 0;
     border-radius: 50%;
-    background: var(--status);
+    background: var(--cta);
     animation: ping 2.2s cubic-bezier(0, 0, 0.2, 1) infinite;
   }
 }
@@ -60,9 +121,9 @@
   gap: 12px;
   margin: 0;
   padding: 6px 16px 6px 6px;
-  border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  border: 1px solid var(--line-strong);
   border-radius: var(--radius-pill);
-  background: color-mix(in srgb, var(--accent) 7%, transparent);
+  background: var(--surface);
   font-size: 12px;
   color: var(--text-soft);
 }
@@ -73,12 +134,12 @@
   gap: 7px;
   padding: 4px 10px;
   border-radius: var(--radius-pill);
-  background: color-mix(in srgb, var(--accent) 18%, transparent);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
   font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--accent-ink);
 }
 
 .label {
@@ -92,11 +153,6 @@
   font-weight: 600;
   letter-spacing: -0.02em;
   color: var(--text);
-}
-
-.dot.live,
-.dot.live::after {
-  background: var(--accent);
 }
 
 .h1 {
@@ -122,8 +178,9 @@
   font-size: 1.12em;
 }
 
+// The role line stays on one line at desktop widths; the summary under it holds to four.
 .lead {
-  max-width: 540px;
+  max-width: 580px;
   margin: 32px 0 0;
   font-size: 21px;
   line-height: 1.5;
@@ -131,7 +188,7 @@
 }
 
 .intro {
-  max-width: 520px;
+  max-width: 580px;
   margin: 16px 0 0;
   font-size: 16px;
   line-height: 1.7;
@@ -155,9 +212,37 @@
 .d4 { animation-delay: 0.9s; }
 
 @media (max-width: 960px) {
+  // The portrait sits under the copy here, so the details move down with it.
+  .sky {
+    top: auto;
+    height: 46%;
+
+    &::before {
+      mask-image: radial-gradient(90% 80% at 50% 60%, #000, transparent 75%);
+      -webkit-mask-image: radial-gradient(90% 80% at 50% 60%, #000, transparent 75%);
+    }
+  }
+
+  .orbit-a {
+    top: -8%;
+    right: -45%;
+    width: 520px;
+    height: 520px;
+  }
+
+  .spark-a { top: 10%; right: auto; left: 8%; }
+  .spark-c { bottom: 12%; right: 10%; }
+
   .hero-grid {
     grid-template-columns: minmax(0, 1fr);
     min-height: 0;
     padding-top: 40px;
+  }
+}
+
+// On phones the copy runs longer, so the details start lower to stay clear of the links.
+@media (max-width: 560px) {
+  .sky {
+    height: 38%;
   }
 }

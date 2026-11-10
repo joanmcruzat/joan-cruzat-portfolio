@@ -19,7 +19,7 @@
   transition: background-color 0.45s var(--ease);
 
   &:hover {
-    background: rgba(255, 255, 255, 0.025);
+    background: color-mix(in srgb, var(--text) 3%, transparent);
     color: var(--text);
   }
 

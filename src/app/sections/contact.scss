@@ -4,7 +4,7 @@ section {
   padding: 160px 0 140px;
   text-align: center;
 
-  // Soft copper glow behind the content.
+  // Soft sky-blue glow behind the content.
   &::before {
     content: '';
     position: absolute;
@@ -13,7 +13,7 @@ section {
     width: 900px;
     height: 500px;
     margin-left: -450px;
-    background: radial-gradient(closest-side, color-mix(in srgb, var(--accent) 14%, transparent), transparent);
+    background: radial-gradient(closest-side, color-mix(in srgb, var(--brand) 22%, transparent), transparent);
     pointer-events: none;
   }
 }
@@ -46,7 +46,7 @@ section {
   gap: 14px;
   margin-top: 56px;
   padding-bottom: 8px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1px solid var(--line-strong);
   font-size: clamp(24px, 3.2vw, 44px);
   font-weight: 500;
   letter-spacing: -0.03em;
