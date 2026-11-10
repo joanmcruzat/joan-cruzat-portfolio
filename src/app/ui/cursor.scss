@@ -34,9 +34,9 @@
 .dot {
   width: 5px;
   height: 5px;
-  background: var(--accent);
+  // Ink, not accent: the dot has to stay visible over the red buttons.
+  background: var(--text);
   transform: translate(-50%, -50%);
-  box-shadow: 0 0 10px color-mix(in srgb, var(--accent) 60%, transparent);
 }
 
 .frame {
@@ -48,7 +48,7 @@
     position: absolute;
     width: 7px;
     height: 7px;
-    border: 0 solid var(--text-soft);
+    border: 0 solid var(--text);
     opacity: 0.55;
     transition: border-color 0.3s, opacity 0.3s;
 
@@ -59,7 +59,7 @@
   }
 }
 
-// Lock-on: the frame widens and the brackets brighten (not accent: it would vanish on the copper button).
+// Lock-on: the frame widens and the brackets go fully opaque.
 :host(.is-hovering) {
   .frame {
     width: 44px;

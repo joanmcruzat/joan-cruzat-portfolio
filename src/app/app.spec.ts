@@ -86,6 +86,25 @@ describe('App', () => {
       expect(headings[0]?.textContent).toContain('minimum.');
     });
 
+    it('switches to dark mode from the nav toggle', async () => {
+      const toggle = el.querySelector('app-nav .theme-toggle') as HTMLButtonElement;
+      expect(toggle.getAttribute('aria-label')).toBe('Switch to dark mode');
+
+      toggle.click();
+      await settle();
+
+      expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+      expect(toggle.getAttribute('aria-label')).toBe('Switch to light mode');
+      expect(toggle.getAttribute('aria-pressed')).toBe('true');
+
+      document.documentElement.removeAttribute('data-theme');
+      localStorage.clear();
+    });
+
+    it('leaves the availability line out of the hero', () => {
+      expect(el.querySelector('app-hero')?.textContent).not.toContain(CONTENT_FIXTURE.profile.availability);
+    });
+
     it('renders every section the nav links to', () => {
       for (const item of NAV_ITEMS) {
         expect(el.querySelector(`section#${item.id}`), item.id).not.toBeNull();

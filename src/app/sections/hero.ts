@@ -10,15 +10,22 @@ import { PortraitStage } from '../ui/portrait-stage';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CountUp, PortraitStage, TrackDirective],
   template: `
+    <!-- Decoration only: blueprint grid, soft clouds, dashed orbits and sparkles, kept clear of the copy. -->
+    <div class="sky" aria-hidden="true">
+      <span class="orbit orbit-a"></span>
+      <span class="orbit orbit-b"></span>
+      <span class="spark spark-a">✦</span>
+      <span class="spark spark-b">✦</span>
+      <span class="spark spark-c">✦</span>
+    </div>
     <section class="wrap" aria-labelledby="hero-title">
       <div class="hero-grid">
         <div>
           <!-- The row reserves room for the visitor pill, so it appearing after /api/visitors answers doesn't shift the page. -->
           <div class="pills">
-            <p class="pill fade-in"><span class="dot" aria-hidden="true"></span>{{ profile().availability }}</p>
             @if (visitors(); as stats) {
               <p class="visitors fade-in">
-                <span class="live-tag"><span class="dot live" aria-hidden="true"></span>Live</span>
+                <span class="live-tag"><span class="dot" aria-hidden="true"></span>Live</span>
                 <span class="label">Site visitors</span>
                 <app-count-up class="count" [to]="stats.visitors" />
               </p>

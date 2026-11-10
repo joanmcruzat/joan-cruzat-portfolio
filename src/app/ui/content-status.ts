@@ -39,7 +39,7 @@ import { ChangeDetectionStrategy, Component, input, output } from '@angular/core
     .bar, .stage {
       display: block;
       border-radius: 10px;
-      background: linear-gradient(90deg, var(--surface) 0%, rgba(255, 255, 255, .06) 50%, var(--surface) 100%);
+      background: linear-gradient(90deg, color-mix(in srgb, var(--text) 6%, transparent) 0%, color-mix(in srgb, var(--text) 12%, transparent) 50%, color-mix(in srgb, var(--text) 6%, transparent) 100%);
       background-size: 200% 100%;
       animation: shimmer 1.6s linear infinite;
     }

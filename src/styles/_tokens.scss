@@ -1,17 +1,39 @@
-// Design tokens. Change --accent here to re-colour the whole site (glows derive from it via color-mix).
+// Design tokens. The palette is three colours: Sky Blue, Cloud White and Scarlet Red.
+// Cloud White is the page, Sky Blue is the supporting colour (the portrait arch, glows and
+// background details), and Scarlet Red is the one accent.
+// The -deep / -ink shades are darker steps of the same hues, used where text needs 4.5:1 contrast.
 :root {
-  --accent: #e39a7b;
+  --sky-blue: #2c99d6;
+  --sky-blue-deep: #1b78b0;
+  --cloud-white: #f8fafc;
+  --scarlet-red: #eb2f33;
+  // One step darker for button fills: white label text reaches 4.5:1 (the exact red gives 4.2:1).
+  --scarlet-red-fill: #e02a2e;
+  --scarlet-red-ink: #c81e22;
+  --ink: #0f172a;
+  --ink-muted: #566174;
 
-  --bg: #0b0b0c;
-  --surface: #131315;
-  --line: rgba(255, 255, 255, 0.08);
-  --line-strong: rgba(255, 255, 255, 0.18);
-  --text: #ededed;
-  --text-soft: #d6d6da;
-  --text-body: #c9c9cd;
-  --muted: #a1a1a6;
-  --status: #5bd69a;
-  --danger: #f08f8f;
+  --brand: var(--sky-blue);
+  --brand-ink: var(--sky-blue-deep);
+  // Accent for large type and decoration; --accent-ink for small accent text.
+  --accent: var(--scarlet-red);
+  --accent-ink: var(--scarlet-red-ink);
+  --cta: var(--scarlet-red-fill);
+  --cta-hover: var(--scarlet-red-ink);
+  --on-cta: #ffffff;
+
+  --bg: var(--cloud-white);
+  --surface: #ffffff;
+  --line: rgba(15, 23, 42, 0.1);
+  --line-strong: rgba(15, 23, 42, 0.24);
+  --text: var(--ink);
+  --text-soft: #1e293b;
+  --text-body: #334155;
+  --muted: var(--ink-muted);
+  --status: #16a34a;
+  --danger: #c81e22;
+  --shadow: rgba(15, 23, 42, 0.16);
+  --scrim: rgba(15, 23, 42, 0.55);
 
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
 
@@ -27,6 +49,29 @@
   --font-sans: 'Geist', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
   --font-serif: 'Instrument Serif', Georgia, serif;
+
+  color-scheme: light;
+}
+
+// Dark mode: the same three colours on a navy page. Set by ThemeStore (and the inline script in
+// index.html) as data-theme="dark" on <html>. Small red and blue text use lighter steps so they
+// stay at 4.5:1 or better on the dark background.
+:root[data-theme='dark'] {
+  --brand-ink: #5db5e8;
+  --accent-ink: #ff7477;
+
+  --bg: #0b1220;
+  --surface: #131c2e;
+  --line: rgba(248, 250, 252, 0.1);
+  --line-strong: rgba(248, 250, 252, 0.24);
+  --text: var(--cloud-white);
+  --text-soft: #e2e8f0;
+  --text-body: #cbd5e1;
+  --muted: #9aa7b8;
+  --status: #4ade80;
+  --danger: #ff7477;
+  --shadow: rgba(0, 0, 0, 0.5);
+  --scrim: rgba(0, 0, 0, 0.7);
 
   color-scheme: dark;
 }

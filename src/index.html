@@ -5,7 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Joan Cruzat | Senior Full Stack Engineer</title>
   <meta name="description" content="Senior full-stack engineer (.NET, Angular) building secure fintech integrations, payment flows and operator dashboards.">
-  <meta name="theme-color" content="#0B0B0C">
+  <meta name="theme-color" content="#F8FAFC">
+  <!-- Applies a saved dark-mode choice before first paint, so the page doesn't flash light. ThemeStore takes over after boot. -->
+  <script>
+    try {
+      if (localStorage.getItem('theme') === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+    } catch (error) {
+      // Storage is blocked (private mode, strict settings): stay on the default light theme.
+    }
+  </script>
   <link rel="canonical" href="https://joanmcruzat.vercel.app/">
 
   <meta property="og:type" content="website">

@@ -35,7 +35,7 @@ a {
 }
 
 a:hover {
-  color: var(--accent);
+  color: var(--accent-ink);
 }
 
 :focus-visible {
@@ -96,12 +96,12 @@ a:hover {
 }
 
 .btn-primary {
-  background: var(--text);
-  color: var(--bg);
+  background: var(--cta);
+  color: var(--on-cta);
 
   &:hover:not(:disabled) {
-    background: var(--accent);
-    color: var(--bg);
+    background: var(--cta-hover);
+    color: var(--on-cta);
     transform: translateY(-2px);
   }
 }
@@ -112,8 +112,8 @@ a:hover {
   color: var(--text);
 
   &:hover {
-    border-color: var(--accent);
-    color: var(--accent);
+    border-color: var(--accent-ink);
+    color: var(--accent-ink);
     transform: translateY(-2px);
   }
 }
